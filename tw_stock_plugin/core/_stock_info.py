@@ -19,8 +19,8 @@ import glob
 import pandas as pd
 
 from tw_stock_plugin import UpdateStock
-from tw_stock_plugin._config import Config
-from tw_stock_plugin._object import Stock
+from tw_stock_plugin.config import Config
+from tw_stock_plugin.object import Stock
 
 
 class StockInfo:

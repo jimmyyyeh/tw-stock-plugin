@@ -21,7 +21,7 @@ import requests
 import pandas as pd
 from time import sleep
 
-from tw_stock_plugin._config import Config
+from tw_stock_plugin.config import Config
 
 
 class UpdateStock:

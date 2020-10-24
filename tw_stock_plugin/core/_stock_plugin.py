@@ -43,3 +43,8 @@ if __name__ == '__main__':
     print(StockTools.check_is_open_date(datetime.strptime('2020/10/23', '%Y/%m/%d').date()))
     # check if 2020/10/23 is open date, it will type error because it's not type of datetime.time
     print(StockTools.check_is_open_date('2020/03/18'))
+
+    # convert 109/10/10 to ad, it allow Y/m/d and Y-m-d format
+    print(StockTools.republic_era_to_ad(date_='109/10/10'))
+    # convert 2020/10/10 to republic era, it allow Y/m/d and Y-m-d format
+    print(StockTools.ad_to_republic_era(date_='2020/10/10'))
