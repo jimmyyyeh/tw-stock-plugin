@@ -20,7 +20,7 @@ import pandas as pd
 
 from tw_stock_plugin import UpdateStock
 from tw_stock_plugin.config import Config
-from tw_stock_plugin.object import Stock
+from tw_stock_plugin.object.stock import Stock
 
 
 class StockInfo:
