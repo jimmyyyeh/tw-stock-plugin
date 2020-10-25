@@ -50,6 +50,7 @@ class StockInfo:
         csv_files = self._get_stock_csv_files()
         for csv in csv_files:
             df = pd.read_csv(csv, index_col=0)
+            df['證券代號'] = df['證券代號'].astype(str)
             for data in df.values.tolist():
                 stock = Stock(*data)
                 stocks[stock.code] = stock
