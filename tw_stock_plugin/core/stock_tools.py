@@ -50,6 +50,9 @@ class StockTools:
         :param date_:
         :return:
         """
+        if isinstance(date_, date):
+            date_ = date_.strftime('%Y-%m-%d')
+
         if cls._AD_PATTERN.fullmatch(date_) and '/' in date_:
             year, month, day = date_.split('/')
             return '{}/{:02d}/{:02d}'.format(int(year) - 1911,
@@ -61,7 +64,7 @@ class StockTools:
                                              int(month),
                                              int(day))
         else:
-            raise ValueError('date format error, it is not ad format.')
+            raise ValueError('date format error, it is not ad format')
 
     @classmethod
     def republic_era_to_ad(cls, date_):
@@ -82,4 +85,4 @@ class StockTools:
                                              int(month),
                                              int(day))
         else:
-            raise ValueError('date format error, it is not republic era format.')
+            raise ValueError('date format error, it is not republic era format')
