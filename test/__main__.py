@@ -18,7 +18,7 @@ import unittest
 import random
 from datetime import datetime
 
-from tw_stock_plugin import StockInfo, StockTools, Stock
+from tw_stock_plugin import StockInfo, StockTools, StockInfoObject
 
 
 class TwStockPluginTest(unittest.TestCase):
@@ -58,7 +58,7 @@ class TwStockPluginTest(unittest.TestCase):
 
     def test_get_single(self):
         stock_code = random.choice(list(self.stock_dict))
-        stock_info = Stock(**self.stock_dict[stock_code])
+        stock_info = StockInfoObject(**self.stock_dict[stock_code])
         stock_info_test = self.stock_info.get(code=stock_code)
         self.assertEqual(stock_info.__dict__, stock_info_test.__dict__)
 

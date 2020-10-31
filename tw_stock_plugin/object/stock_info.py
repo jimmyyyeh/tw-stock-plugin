@@ -16,7 +16,7 @@
 """
 
 
-class Stock:
+class StockInfoObject:
     def __init__(self, code, name, ISIN_code, listed_date, category, industry, CFI_code):
         """
         :param code: 股票代碼

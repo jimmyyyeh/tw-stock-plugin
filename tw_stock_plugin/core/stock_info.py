@@ -20,7 +20,7 @@ import pandas as pd
 
 from tw_stock_plugin import UpdateStock
 from tw_stock_plugin.config import Config
-from tw_stock_plugin.object.stock import Stock
+from tw_stock_plugin.object.stock_info import StockInfoObject
 
 
 class StockInfo:
@@ -52,8 +52,8 @@ class StockInfo:
             df = pd.read_csv(csv, index_col=0)
             df['證券代號'] = df['證券代號'].astype(str)
             for data in df.values.tolist():
-                stock = Stock(*data)
-                stocks[stock.code] = stock
+                stock_info = StockInfoObject(*data)
+                stocks[stock_info.code] = stock_info
         return stocks
 
     def get(self, code=None):
