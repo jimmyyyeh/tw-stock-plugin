@@ -152,7 +152,7 @@ trading_history_1101 = stock_trading.get_history(code=1101)
 # getting monthly history trading data of 9962 in 2020/10
 trading_history_9962 = stock_trading.get_history(code=9962)
 ```
-### [Sample Code](https://github.com/chienfeng0719/tw-stock-plugin/blob/develop/example.py)
+### [Sample Code](https://github.com/jimmyyyeh/tw-stock-plugin/blob/develop/example.py)
 ```python
 # -*- coding: utf-8 -*
 """
