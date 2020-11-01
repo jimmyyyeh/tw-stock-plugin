@@ -18,12 +18,14 @@ import unittest
 import random
 from datetime import datetime
 
-from tw_stock_plugin import StockInfo, StockTools, StockInfoObject
+from tw_stock_plugin import StockInfo, StockTrading, StockTools, StockInfoObject
 
 
 class TwStockPluginTest(unittest.TestCase):
     def setUp(self):
+        self.testing_date = datetime(2020, 10, 30).date()
         self.stock_info = StockInfo()
+        self.stock_trading = StockTrading(date_=self.testing_date)
         self.stock_dict = {
             '2330': {'code': '2330',
                      'name': '台積電',
@@ -46,6 +48,32 @@ class TwStockPluginTest(unittest.TestCase):
                      'category': '興櫃',
                      'industry': '觀光事業',
                      'CFI_code': 'ESVUFR'},
+        }
+        self.trading_dict = {
+            '2330': {'trading_volume': 49770771,
+                     'trade_value': 21614729093,
+                     'opening_price': 437,
+                     'highest_price': 437,
+                     'lowest_price': 432,
+                     'closing_price': 432,
+                     'change': -5,
+                     'transaction': 46871},
+            '1101': {'trading_volume': 8847997,
+                     'trade_value': 364378782,
+                     'opening_price': 41.5,
+                     'highest_price': 41.65,
+                     'lowest_price': 41,
+                     'closing_price': 41,
+                     'change': -4,
+                     'transaction': 4197},
+            '9962': {'trading_volume': 59000,
+                     'trade_value': 536000,
+                     'opening_price': 9.02,
+                     'highest_price': 9.11,
+                     'lowest_price': 8.91,
+                     'closing_price': 9.11,
+                     'change': 0.09,
+                     'transaction': 22}
         }
         self.date_convert_dict = {
             '2020/10/10': '109/10/10',
@@ -86,6 +114,15 @@ class TwStockPluginTest(unittest.TestCase):
         ad = random.choice(list(self.date_convert_dict))
         republic_era = self.date_convert_dict[ad]
         self.assertEqual(republic_era, StockTools.ad_to_republic_era(date_=ad))
+
+    def test_trading_data_history(self):
+        stock_code = random.choice(list(self.trading_dict))
+        stock_trading_history = self.trading_dict[stock_code]
+        stock_trading_history_test = self.stock_trading.get_history(code=stock_code)
+        for key in stock_trading_history.keys():
+            value = stock_trading_history[key]
+            value_test = getattr(stock_trading_history_test, key)
+            self.assertEqual(value, value_test)
 
 
 if __name__ == '__main__':

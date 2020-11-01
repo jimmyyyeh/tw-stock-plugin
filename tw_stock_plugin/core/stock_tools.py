@@ -15,32 +15,37 @@
     God Bless,Never Bug
 """
 
-import re
-import requests
 from datetime import datetime, date
+
+from tw_stock_plugin.regex_pattern import DatePattern
+from tw_stock_plugin.constant import Domain
+from tw_stock_plugin.utils.response_handler import ResponseHandler
 
 
 class StockTools:
-    _REPUBLIC_ERA_PATTERN = re.compile(r'\d{2,3}[/-]\d{1,2}[/-]\d{1,2}')  # regex of republic era
-    _AD_PATTERN = re.compile(r'\d{4}[/-]\d{1,2}[/-]\d{1,2}')  # regex of ad
 
     @classmethod
     def check_is_open_date(cls, date_):
         """
-        check if input date is open date
+        check if input date is open date (available in after-hour time)
         :param date_:
         :return:
         """
         if not isinstance(date_, date):
             raise TypeError('input date must be type of datetime.date')
-        url = 'https://mis.twse.com.tw/stock/data/futures_side.txt'
-        response = requests.get(url)
-        json_data = response.json()
-        msg_array = json_data['msgArray']
-        msg = msg_array[0]
-        json_date = msg['d']
-        json_date = datetime.strptime(json_date, '%Y%m%d')
-        return json_date.date() == date_
+        if date_ > datetime.now().date():
+            raise AttributeError('The input date must earlier than today.'.format(date))
+
+        query_date = cls.ad_to_republic_era(date_=date_).replace('-', '/')
+        url = f'{Domain.TAIPEI_EXCHANGE}/web/stock/aftertrading/index_summary/summary_result.php'
+        params = {'l': 'zh-tw',
+                  'd': query_date}
+        response = ResponseHandler.get(url=url, params=params)
+        json_data = response.json()['aaData']
+        if json_data:
+            return True
+        else:
+            return False
 
     @classmethod
     def ad_to_republic_era(cls, date_):
@@ -53,12 +58,12 @@ class StockTools:
         if isinstance(date_, date):
             date_ = date_.strftime('%Y-%m-%d')
 
-        if cls._AD_PATTERN.fullmatch(date_) and '/' in date_:
+        if DatePattern.AD_PATTERN.fullmatch(date_) and '/' in date_:
             year, month, day = date_.split('/')
             return '{}/{:02d}/{:02d}'.format(int(year) - 1911,
                                              int(month),
                                              int(day))
-        elif cls._AD_PATTERN.fullmatch(date_) and '-' in date_:
+        elif DatePattern.AD_PATTERN.fullmatch(date_) and '-' in date_:
             year, month, day = date_.split('-')
             return '{}-{:02d}-{:02d}'.format(int(year) - 1911,
                                              int(month),
@@ -74,12 +79,12 @@ class StockTools:
         :param date_:
         :return:
         """
-        if cls._REPUBLIC_ERA_PATTERN.fullmatch(date_) and '/' in date_:
+        if DatePattern.REPUBLIC_ERA_PATTERN.fullmatch(date_) and '/' in date_:
             year, month, day = date_.split('/')
             return '{}/{:02d}/{:02d}'.format(int(year) + 1911,
                                              int(month),
                                              int(day))
-        elif cls._REPUBLIC_ERA_PATTERN.fullmatch(date_) and '-' in date_:
+        elif DatePattern.REPUBLIC_ERA_PATTERN.fullmatch(date_) and '-' in date_:
             year, month, day = date_.split('-')
             return '{}-{:02d}-{:02d}'.format(int(year) + 1911,
                                              int(month),
