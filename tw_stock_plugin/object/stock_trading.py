@@ -18,9 +18,10 @@ from tw_stock_plugin.regex_pattern import TradingPattern
 
 
 class TwseTradingObject:
-    def __init__(self, code, name, trading_volume, transaction, trade_value, opening_price, highest_price, lowest_price,
-                 closing_price, different, change, last_best_bid_price, last_best_bid_volume, last_best_ask_price,
-                 last_best_ask_volume, price_earning_rate):
+    def __init__(self, trading_volume, transaction, trade_value, opening_price, highest_price, lowest_price,
+                 closing_price, change, code=None, name=None, different=None, last_best_bid_price=None,
+                 last_best_bid_volume=None, last_best_ask_price=None, last_best_ask_volume=None,
+                 price_earning_rate=None):
         """
         :param code: 股票代碼
         :param name: 股票名稱
@@ -31,7 +32,7 @@ class TwseTradingObject:
         :param highest_price: 最高價
         :param lowest_price: 最低價
         :param closing_price: 收盤價
-        :param different: 漲跌幅
+        :param different: 漲跌(+/-)
         :param change: 漲跌價差
         :param last_best_bid_price: 最後揭示買價
         :param last_best_bid_volume: 最後揭示賣價
@@ -48,7 +49,7 @@ class TwseTradingObject:
         self.highest_price = highest_price
         self.lowest_price = lowest_price
         self.closing_price = closing_price
-        self.different = different
+        self._different = different
         self.change = change
         self.last_best_bid_price = last_best_bid_price
         self.last_best_bid_volume = last_best_bid_volume
@@ -58,19 +59,25 @@ class TwseTradingObject:
         self._format_value()
 
     def _format_value(self):
-        self.different = TradingPattern.DIFFERENT_PATTERN.search(self.different).group() \
-            if TradingPattern.DIFFERENT_PATTERN.search(self.different) else None
+        self._different = TradingPattern.DIFFERENT_PATTERN.search(self._different).group() \
+            if self._different and TradingPattern.DIFFERENT_PATTERN.search(self._different) else None
+        self.change = f'{self._different}{self.change}' if self._different and self.change else None
         for key, value in self.__dict__.items():
-            if value == '--':
+            if value == '--' or not value or (value and not value.strip()):
                 setattr(self, key, None)
-            if value and ',' in value:
+            elif value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
+            elif value and TradingPattern.VALUE_PATTERN.fullmatch(value) and key != 'code':
+                setattr(self, key, float(value))
+            else:
+                setattr(self, key, value.strip())
 
 
 class TpexTradingObject:
-    def __init__(self, code, name, closing_price, change, opening_price, highest_price, lowest_price, trading_volume,
-                 trade_value, transaction, last_best_bid_price, last_best_ask_price, last_best_bid_volume,
-                 last_best_ask_volume, issued_shares, next_limit_up, next_limit_down_next):
+    def __init__(self, closing_price, change, opening_price, highest_price, lowest_price, trading_volume, trade_value,
+                 transaction, code=None, name=None, last_best_bid_price=None, last_best_ask_price=None,
+                 last_best_bid_volume=None, last_best_ask_volume=None, issued_shares=None, next_limit_up=None,
+                 next_limit_down=None):
         """
         :param code: 股票代碼
         :param name: 股票名稱
@@ -88,7 +95,7 @@ class TpexTradingObject:
         :param last_best_ask_volume: 最後揭示買量
         :param issued_shares: 發行股數
         :param next_limit_up: 次日漲停價
-        :param next_limit_down_next: 次日跌停價
+        :param next_limit_down: 次日跌停價
         """
         self.code = code
         self.name = name
@@ -106,15 +113,23 @@ class TpexTradingObject:
         self.last_best_ask_volume = last_best_ask_volume
         self.issued_shares = issued_shares
         self.next_limit_up = next_limit_up
-        self.next_limit_down_next = next_limit_down_next
+        self.next_limit_down = next_limit_down
         self._format_value()
 
     def _format_value(self):
         for key, value in self.__dict__.items():
-            if value == '----':
+            if value == '----' or not value or (value and not value.strip()):
                 setattr(self, key, None)
-            if value and ',' in value:
+            elif value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
+            elif value and TradingPattern.VALUE_PATTERN.fullmatch(value) and key != 'code':
+                setattr(self, key, float(value))
+            else:
+                setattr(self, key, value.strip())
 
-        self.last_best_bid_volume = self.last_best_bid_volume * 1000 if self.last_best_bid_volume else None
-        self.last_best_ask_volume = self.last_best_ask_volume * 1000 if self.last_best_ask_volume else None
+        if self.code and self.name:
+            self.last_best_bid_volume = self.last_best_bid_volume * 1000 if self.last_best_bid_volume else None
+            self.last_best_ask_volume = self.last_best_ask_volume * 1000 if self.last_best_ask_volume else None
+        else:
+            self.trading_volume = self.trading_volume * 1000 if self.trading_volume else None
+            self.trade_value = self.trade_value * 1000 if self.trade_value else None

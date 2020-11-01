@@ -23,5 +23,5 @@ class DatePattern:
 
 
 class TradingPattern:
-    VALUE_PATTERN = re.compile(r'[+-]*[\d]+[\.]*[\d]+')
+    VALUE_PATTERN = re.compile(r'[+-]*[\d]+[\.\d]*')
     DIFFERENT_PATTERN = re.compile(r'[+-]')

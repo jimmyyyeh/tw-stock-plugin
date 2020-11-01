@@ -15,7 +15,7 @@
     God Bless,Never Bug
 """
 from datetime import datetime
-from tw_stock_plugin import StockInfo, StockTools, UpdateStock
+from tw_stock_plugin import StockInfo, StockTrading, StockTools, UpdateStock
 
 if __name__ == '__main__':
     # init stock info object
@@ -40,6 +40,36 @@ if __name__ == '__main__':
     print(StockTools.republic_era_to_ad(date_='109/10/10'))
     # convert 2020/10/10 to republic era, it allow Y/m/d and Y-m-d format
     print(StockTools.ad_to_republic_era(date_='2020/10/10'))
+
+    # setting target date
+    date_ = datetime(2020, 10, 30).date()
+
+    # init stock trading object with specific date
+    stock_trading = StockTrading(date_=date_)
+
+    # getting all trading data in 2020/10/30
+    trading_all = stock_trading.get_all()
+
+    # getting 2330 trading data in 2020/10/30
+    trading_2330 = trading_all['2330']
+    # print 2330 name
+    print(trading_2330.name)
+    # print 2330 code
+    print(trading_2330.code)
+    # print 2330 trade_value
+    print(trading_2330.trade_value)
+    # print 2330 closing_price
+    print(trading_2330.closing_price)
+
+    # getting monthly history trading data of 1101 in 2020/10
+    trading_history_1101 = stock_trading.get_history(code=1101)
+    # get only 2020/10/30 trading data
+    print(trading_history_1101[date_])
+
+    # getting monthly history trading data of 9962 in 2020/10
+    trading_history_9962 = stock_trading.get_history(code=9962)
+    # get only 2020/10/30 trading data
+    print(trading_history_9962[date_])
 
     # update newest stock info
     UpdateStock.main()

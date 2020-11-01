@@ -49,7 +49,7 @@ class TwStockPluginTest(unittest.TestCase):
                      'industry': '觀光事業',
                      'CFI_code': 'ESVUFR'},
         }
-        self.trading_dict = {
+        self.trading_history_dict = {
             '2330': {'trading_volume': 49770771,
                      'trade_value': 21614729093,
                      'opening_price': 437,
@@ -58,14 +58,14 @@ class TwStockPluginTest(unittest.TestCase):
                      'closing_price': 432,
                      'change': -5,
                      'transaction': 46871},
-            '1101': {'trading_volume': 8847997,
-                     'trade_value': 364378782,
-                     'opening_price': 41.5,
-                     'highest_price': 41.65,
-                     'lowest_price': 41,
-                     'closing_price': 41,
-                     'change': -4,
-                     'transaction': 4197},
+            '1101': {'trading_volume': 8723616,
+                     'trade_value': 353231776,
+                     'opening_price': 40.35,
+                     'highest_price': 40.60,
+                     'lowest_price': 40.30,
+                     'closing_price': 40.55,
+                     'change': 0.2,
+                     'transaction': 2925},
             '9962': {'trading_volume': 59000,
                      'trade_value': 536000,
                      'opening_price': 9.02,
@@ -74,6 +74,55 @@ class TwStockPluginTest(unittest.TestCase):
                      'closing_price': 9.11,
                      'change': 0.09,
                      'transaction': 22}
+        }
+        self.trading_all_dict = {
+            '1101': {'code': '1101',
+                     'name': '台泥',
+                     'trading_volume': 8723616,
+                     'transaction': 2925,
+                     'trade_value': 353231776,
+                     'opening_price': 40.35,
+                     'highest_price': 40.6,
+                     'lowest_price': 40.3,
+                     'closing_price': 40.55,
+                     'change': 0.2,
+                     'last_best_bid_price': 40.5,
+                     'last_best_bid_volume': 59,
+                     'last_best_ask_price': 40.55,
+                     'last_best_ask_volume': 145,
+                     'price_earning_rate': 9.56},
+            '2330': {'code': '2330',
+                     'name': '台積電',
+                     'trading_volume': 49770771,
+                     'transaction': 46871,
+                     'trade_value': 21614729093,
+                     'opening_price': 437,
+                     'highest_price': 437,
+                     'lowest_price': 432,
+                     'closing_price': 432,
+                     'change': -5,
+                     'last_best_bid_price': 432,
+                     'last_best_bid_volume': 1338,
+                     'last_best_ask_price': 432.50,
+                     'last_best_ask_volume': 3,
+                     'price_earning_rate': 24.63},
+            '1258': {'code': '1258',
+                     'name': '其祥-KY',
+                     'closing_price': 12.80,
+                     'change': -0.3,
+                     'opening_price': 12.8,
+                     'highest_price': 12.8,
+                     'lowest_price': 12.8,
+                     'trading_volume': 2000,
+                     'trade_value': 25600,
+                     'transaction': 2,
+                     'last_best_bid_price': 12.8,
+                     'last_best_bid_volume': 3000,
+                     'last_best_ask_price': 13.1,
+                     'last_best_ask_volume': 1000,
+                     'issued_shares': 36819791,
+                     'next_limit_up': 14.05,
+                     'next_limit_down': 11.55}
         }
         self.date_convert_dict = {
             '2020/10/10': '109/10/10',
@@ -116,12 +165,21 @@ class TwStockPluginTest(unittest.TestCase):
         self.assertEqual(republic_era, StockTools.ad_to_republic_era(date_=ad))
 
     def test_trading_data_history(self):
-        stock_code = random.choice(list(self.trading_dict))
-        stock_trading_history = self.trading_dict[stock_code]
-        stock_trading_history_test = self.stock_trading.get_history(code=stock_code)
+        stock_code = random.choice(list(self.trading_history_dict))
+        stock_trading_history = self.trading_history_dict[stock_code]
+        stock_trading_history_test = self.stock_trading.get_history(code=stock_code)[self.testing_date]
         for key in stock_trading_history.keys():
             value = stock_trading_history[key]
             value_test = getattr(stock_trading_history_test, key)
+            self.assertEqual(value, value_test)
+
+    def test_trading_data_all(self):
+        stock_code = random.choice(list(self.trading_all_dict))
+        stock_trading_all = self.trading_all_dict[stock_code]
+        stock_trading_all_test = self.stock_trading.get_all()[stock_code]
+        for key in stock_trading_all.keys():
+            value = stock_trading_all[key]
+            value_test = getattr(stock_trading_all_test, key)
             self.assertEqual(value, value_test)
 
 

@@ -18,3 +18,4 @@
 from tw_stock_plugin.core.update_stock import *
 from tw_stock_plugin.core.stock_tools import *
 from tw_stock_plugin.core.stock_info import *
+from tw_stock_plugin.core.stock_trading import *
