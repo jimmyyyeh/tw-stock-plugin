@@ -63,9 +63,9 @@ class InstitutionalInvestors:
 
     def _format_value(self):
         for key, value in self.__dict__.items():
-            if key in {'code', 'name'}:
-                continue
-            elif value and ',' in value:
+            if value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
+            elif key in {'code', 'name'}:
+                setattr(self, key, value.strip())
             else:
                 setattr(self, key, float(value.strip()))
