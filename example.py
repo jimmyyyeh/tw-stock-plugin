@@ -15,7 +15,7 @@
     God Bless,Never Bug
 """
 from datetime import datetime
-from tw_stock_plugin import StockInfo, StockTrading, StockTools, UpdateStock
+from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockTools, UpdateStock
 
 if __name__ == '__main__':
     # init stock info object
@@ -71,5 +71,19 @@ if __name__ == '__main__':
     # get only 2020/10/30 trading data
     print(trading_history_9962[date_])
 
+    # init stock institutional investors object with specific date
+    stock_institutional_investors = StockInstitutionalInvestors(date_=date_)
+
+    # getting all institutional investors data in 2020/10/30
+    institutional_investors_all = stock_institutional_investors.get_all()
+
+    # getting 2330 institutional investors data in 2020/10/30
+    institutional_investors_2330 = institutional_investors_all['2330']
+    # print 2330 foreign mainland area buy
+    print(institutional_investors_2330.foreign_mainland_area_buy)
+    # getting 3529 institutional investors data in 2020/10/30
+    institutional_investors_3529 = institutional_investors_all['3529']
+    # print 3529 foreign mainland area buy
+    print(institutional_investors_3529.trust_diff)
     # update newest stock info
     UpdateStock.main()
