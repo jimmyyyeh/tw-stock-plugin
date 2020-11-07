@@ -4,6 +4,7 @@
 ## What can tw-stock-plugin do?
 - Getting newest stock information from official website.
 - Getting daily stock trading data from official website.
+- Getting daily stock institutional investors data from official website.
 - Check if the date is open date in stock market.
 - Convert specific datetime format more easily.
 
@@ -72,7 +73,7 @@ print(StockTools.ad_to_republic_era(date_='2020/10/10'))
 ### Getting Daily Trading Data
 ```python
 """
-    You can get all day and all stocks data or get only single one stock history data.
+    You can get all data with specific date or get only single one stock history data.
 
     Attribute:
         - Daily Trading Data
@@ -152,6 +153,48 @@ trading_history_1101 = stock_trading.get_history(code=1101)
 # getting monthly history trading data of 9962 in 2020/10
 trading_history_9962 = stock_trading.get_history(code=9962)
 ```
+
+### Getting Institutional Investors Data
+```python
+"""
+    You can get all data with specific date.
+
+    Attribute:
+        - code: 股票代碼
+        - name: 股票名稱
+        - foreign_mainland_area_buy: 外陸資買進股數(不含外資自營商)
+        - foreign_mainland_area_sell: 外陸資賣出股數(不含外資自營商)
+        - foreign_mainland_area_diff: 外陸資買賣超股數(不含外資自營商)
+        - foreign_buy: 外資自營商買進股數
+        - foreign_sell: 外資自營商賣出股數
+        - foreign_diff: 外資自營商買賣超股數
+        - trust_buy: 投信買進股數
+        - trust_sell: 投信賣出股數
+        - trust_diff: 投信買賣超股數
+        - proprietary_dealers_buy: 自營商買進股數(自行買賣)
+        - proprietary_dealers_sell: 自營商賣出股數(自行買賣)
+        - proprietary_dealers_diff: 自營商買賣超股數(自行買賣)
+        - hedge_dealers_buy: 自營商買進股數(避險)
+        - hedge_dealers_sell: 自營商賣出股數(避險)
+        - hedge_dealers_diff: 自營商買賣超股數(避險)
+        - total_diff: 三大法人買賣超股數
+"""
+from datetime import datetime
+from tw_stock_plugin.core.stock_institutional_investors import StockInstitutionalInvestors
+
+date_ = datetime(2020, 11, 6).date()
+# init stock institutional investors object with specific date
+stock_institutional_investors = StockInstitutionalInvestors(date_=date_)
+
+# getting all institutional investors data in 2020/10/30
+institutional_investors_all = stock_institutional_investors.get_all()
+
+# getting 2330 institutional investors data in 2020/10/30
+institutional_investors_2330 = institutional_investors_all['2330']
+
+# getting 3529 institutional investors data in 2020/10/30
+institutional_investors_3529 = institutional_investors_all['3529']
+```
 ### [Sample Code](https://github.com/jimmyyyeh/tw-stock-plugin/blob/develop/example.py)
 ```python
 # -*- coding: utf-8 -*
@@ -171,7 +214,7 @@ trading_history_9962 = stock_trading.get_history(code=9962)
     God Bless,Never Bug
 """
 from datetime import datetime
-from tw_stock_plugin import StockInfo, StockTrading, StockTools, UpdateStock
+from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockTools, UpdateStock
 
 if __name__ == '__main__':
     # init stock info object
@@ -227,8 +270,23 @@ if __name__ == '__main__':
     # get only 2020/10/30 trading data
     print(trading_history_9962[date_])
 
+    # init stock institutional investors object with specific date
+    stock_institutional_investors = StockInstitutionalInvestors(date_=date_)
+
+    # getting all institutional investors data in 2020/10/30
+    institutional_investors_all = stock_institutional_investors.get_all()
+
+    # getting 2330 institutional investors data in 2020/10/30
+    institutional_investors_2330 = institutional_investors_all['2330']
+    # print 2330 foreign mainland area buy
+    print(institutional_investors_2330.foreign_mainland_area_buy)
+    # getting 3529 institutional investors data in 2020/10/30
+    institutional_investors_3529 = institutional_investors_all['3529']
+    # print 3529 foreign mainland area buy
+    print(institutional_investors_3529.trust_diff)
     # update newest stock info
     UpdateStock.main()
+
 ```
 
 ---

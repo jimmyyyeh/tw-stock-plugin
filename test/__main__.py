@@ -18,7 +18,7 @@ import unittest
 import random
 from datetime import datetime
 
-from tw_stock_plugin import StockInfo, StockTrading, StockTools, StockInfoObject
+from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockTools, StockInfoObject
 
 
 class TwStockPluginTest(unittest.TestCase):
@@ -26,6 +26,7 @@ class TwStockPluginTest(unittest.TestCase):
         self.testing_date = datetime(2020, 10, 30).date()
         self.stock_info = StockInfo()
         self.stock_trading = StockTrading(date_=self.testing_date)
+        self.stock_institutional_investors = StockInstitutionalInvestors(date_=self.testing_date)
         self.stock_dict = {
             '2330': {'code': '2330',
                      'name': '台積電',
@@ -124,6 +125,62 @@ class TwStockPluginTest(unittest.TestCase):
                      'next_limit_up': 14.05,
                      'next_limit_down': 11.55}
         }
+        self.institutional_investors_all_dict = {
+            '1101': {'code': '1101',
+                     'name': '台泥',
+                     'foreign_mainland_area_buy': 5474400,
+                     'foreign_mainland_area_sell': 4865925,
+                     'foreign_mainland_area_diff': 608475,
+                     'foreign_buy': 0,
+                     'foreign_sell': 0,
+                     'foreign_diff': 0,
+                     'trust_buy': 0,
+                     'trust_sell': 0,
+                     'trust_diff': 0,
+                     'proprietary_dealers_buy': 14000,
+                     'proprietary_dealers_sell': 516000,
+                     'proprietary_dealers_diff': -502000,
+                     'hedge_dealers_buy': 835000,
+                     'hedge_dealers_sell': 79000,
+                     'hedge_dealers_diff': 756000,
+                     'total_diff': 862475},
+            '2330': {'code': '2330',
+                     'name': '台積電',
+                     'foreign_mainland_area_buy': 19943461,
+                     'foreign_mainland_area_sell': 39095735,
+                     'foreign_mainland_area_diff': -19152274,
+                     'foreign_buy': 0,
+                     'foreign_sell': 0,
+                     'foreign_diff': 0,
+                     'trust_buy': 30000,
+                     'trust_sell': 46000,
+                     'trust_diff': -16000,
+                     'proprietary_dealers_buy': 75000,
+                     'proprietary_dealers_sell': 1197000,
+                     'proprietary_dealers_diff': -1122000,
+                     'hedge_dealers_buy': 174000,
+                     'hedge_dealers_sell': 431998,
+                     'hedge_dealers_diff': -257998,
+                     'total_diff': -20548272},
+            '3260': {'code': '3260',
+                     'name': '威剛',
+                     'foreign_mainland_area_buy': 105000,
+                     'foreign_mainland_area_sell': 285000,
+                     'foreign_mainland_area_diff': -180000,
+                     'foreign_buy': 0,
+                     'foreign_sell': 0,
+                     'foreign_diff': 0,
+                     'trust_buy': 0,
+                     'trust_sell': 0,
+                     'trust_diff': 0,
+                     'proprietary_dealers_buy': 14000,
+                     'proprietary_dealers_sell': 30000,
+                     'proprietary_dealers_diff': -16000,
+                     'hedge_dealers_buy': 2000,
+                     'hedge_dealers_sell': 18000,
+                     'hedge_dealers_diff': -16000,
+                     'total_diff': -212000}
+        }
         self.date_convert_dict = {
             '2020/10/10': '109/10/10',
             '2020/01/01': '109/01/01',
@@ -180,6 +237,15 @@ class TwStockPluginTest(unittest.TestCase):
         for key in stock_trading_all.keys():
             value = stock_trading_all[key]
             value_test = getattr(stock_trading_all_test, key)
+            self.assertEqual(value, value_test)
+
+    def test_institutional_investors_data_all(self):
+        stock_code = random.choice(list(self.institutional_investors_all_dict))
+        stock_institutional_investors_all = self.institutional_investors_all_dict[stock_code]
+        stock_institutional_investors_all_test = self.stock_institutional_investors.get_all()[stock_code]
+        for key in stock_institutional_investors_all.keys():
+            value = stock_institutional_investors_all[key]
+            value_test = getattr(stock_institutional_investors_all_test, key)
             self.assertEqual(value, value_test)
 
 
