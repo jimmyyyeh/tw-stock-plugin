@@ -60,8 +60,15 @@ class UpdateStock:
                                            params=params)
 
             df = pd.read_html(response.text)[0]
-            df_columns = df.iloc[0]
-            new_data = [data for data in df.values.tolist() if StockPattern.CODE_NAME_PATTERN.search(data[0])]
+            df_columns = df.iloc[0].values.tolist() + ['類別']
+            new_data = list()
+            tmp_type = None
+            for data in df.values.tolist()[1:]:
+                if not StockPattern.CODE_NAME_PATTERN.search(data[0]) and len(set(data)) == 1:
+                    tmp_type = data[0]
+                elif StockPattern.CODE_NAME_PATTERN.search(data[0]):
+                    data.append(tmp_type)
+                    new_data.append(data)
             df = pd.DataFrame(new_data, columns=df_columns)
             code_name_df = pd.DataFrame(df['有價證券代號及名稱'].str.split('\u3000', 1).tolist(),
                                         columns=['證券代號', '證券名稱'])

@@ -17,7 +17,7 @@
 
 
 class StockInfoObject:
-    def __init__(self, code, name, ISIN_code, listed_date, category, industry, CFI_code):
+    def __init__(self, code, name, ISIN_code, listed_date, category, industry, CFI_code, type):
         """
         :param code: 股票代碼
         :param name: 股票名稱
@@ -26,6 +26,7 @@ class StockInfoObject:
         :param category: 市場別
         :param industry: 產業別
         :param CFI_code: CFICode
+        :param type: 證券類別
         """
         self.code = code
         self.name = name
@@ -34,3 +35,4 @@ class StockInfoObject:
         self.category = category
         self.industry = industry
         self.CFI_code = CFI_code
+        self.type = type

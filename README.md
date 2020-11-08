@@ -36,6 +36,7 @@
         - category: 市場別
         - industry: 產業別
         - CFI_code: CFICode
+        - type: 證券類別(股票/ETF...)
 """
 from tw_stock_plugin import StockInfo, UpdateStock
 
