@@ -59,9 +59,10 @@ class TwseTradingObject:
         self._format_value()
 
     def _format_value(self):
-        self._different = TradingPattern.DIFFERENT_PATTERN.search(self._different).group() \
-            if self._different and TradingPattern.DIFFERENT_PATTERN.search(self._different) else None
-        self.change = f'{self._different}{self.change}' if self._different and self.change else None
+        if self._different and TradingPattern.DIFFERENT_PATTERN.search(self._different):
+            self._different = TradingPattern.DIFFERENT_PATTERN.search(self._different).group()
+            self.change = f'{self._different}{self.change}' if self._different else self.change
+
         for key, value in self.__dict__.items():
             if value == '--' or not value or (value and not value.strip()):
                 setattr(self, key, None)
