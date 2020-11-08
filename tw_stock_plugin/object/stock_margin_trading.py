@@ -14,6 +14,7 @@
         ┗┻┛    ┗┻┛
     God Bless,Never Bug
 """
+from tw_stock_plugin.regex_pattern import MarginTradingPattern
 
 
 class TwseMarginTradingObject:
@@ -43,15 +44,15 @@ class TwseMarginTradingObject:
         self.margin_purchase = margin_purchase
         self.margin_sells = margin_sells
         self.cash_redemption = cash_redemption
-        self.balance_of_previous_day_cash = cash_balance_of_previous_day
-        self.balance_of_the_day_cash = cash_balance_of_the_day
-        self.quota_cash = cash_quota
+        self.cash_balance_of_previous_day = cash_balance_of_previous_day
+        self.cash_balance_of_the_day = cash_balance_of_the_day
+        self.cash_quota = cash_quota
         self.short_covering = short_covering
         self.short_sale = short_sale
         self.stock_redemption = stock_redemption
-        self.balance_of_previous_day_stock = stock_balance_of_previous_day
-        self.balance_of_the_day_stock_cash = stock_balance_of_the_day
-        self.quota_stock = stock_quota
+        self.stock_balance_of_previous_day = stock_balance_of_previous_day
+        self.stock_balance_of_the_day = stock_balance_of_the_day
+        self.stock_quota = stock_quota
         self.offset = offset
         self.note = note
         self._format_value()
@@ -60,8 +61,14 @@ class TwseMarginTradingObject:
         for key, value in self.__dict__.items():
             if value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
-            elif key in {'code', 'name', 'note'}:
+            elif key in {'code', 'name'}:
                 setattr(self, key, value.strip())
+            elif key in {'note'}:
+                value = value.strip()
+                if MarginTradingPattern.NOTE_STRIP_PATTERN.search(value):
+                    setattr(self, key, MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value))
+                if not getattr(self, key):
+                    setattr(self, key, None)
             else:
                 setattr(self, key, float(value.strip()))
 
@@ -95,22 +102,22 @@ class TpexMarginTradingObject:
         """
         self.code = code
         self.name = name
-        self.balance_of_previous_day_cash = cash_balance_of_previous_day
+        self.cash_balance_of_previous_day = cash_balance_of_previous_day
         self.margin_purchase = margin_purchase
         self.margin_sells = margin_sells
         self.cash_redemption = cash_redemption
-        self.balance_of_the_day_cash = cash_balance_of_the_day
+        self.cash_balance_of_the_day = cash_balance_of_the_day
         self.cash_belong_to_securities_finance = cash_belong_to_securities_finance
         self.cash_utilization_rate = cash_utilization_rate
-        self.quota_cash = cash_quota
-        self.balance_of_previous_day_stock = stock_balance_of_previous_day
+        self.cash_quota = cash_quota
+        self.stock_balance_of_previous_day = stock_balance_of_previous_day
         self.short_covering = short_covering
         self.short_sale = short_sale
         self.stock_redemption = stock_redemption
-        self.balance_of_the_day_stock_cash = stock_balance_of_the_day
+        self.stock_balance_of_the_day = stock_balance_of_the_day
         self.stock_belong_to_securities_finance = stock_belong_to_securities_finance
         self.stock_utilization_rate = stock_utilization_rate
-        self.quota_stock = stock_quota
+        self.stock_quota = stock_quota
         self.offset = offset
         self.note = note
         self._format_value()
@@ -119,7 +126,13 @@ class TpexMarginTradingObject:
         for key, value in self.__dict__.items():
             if value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
-            elif key in {'code', 'name', 'note'}:
+            elif key in {'code', 'name'}:
                 setattr(self, key, value.strip())
+            elif key in {'note'}:
+                value = value.strip()
+                if MarginTradingPattern.NOTE_STRIP_PATTERN.search(value):
+                    setattr(self, key, MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value))
+                if not getattr(self, key):
+                    setattr(self, key, None)
             else:
                 setattr(self, key, float(value.strip()))
