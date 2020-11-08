@@ -24,7 +24,7 @@ setuptools.setup(
     version='0.0.1',
     author='Jimmy Yeh',
     author_email='chienfeng0719@hotmail.com',
-    description='Some common function when doing Taiwan stock web scraping',
+    description='Some util function when doing Taiwan stock web scraping and some common stock data parser',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/chienfeng0719/tw-stock-plugin',
