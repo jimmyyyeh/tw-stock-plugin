@@ -14,7 +14,7 @@
         ┗┻┛    ┗┻┛
     God Bless,Never Bug
 """
-from datetime import datetime, date
+from datetime import date
 
 from tw_stock_plugin.core.stock_tools import StockTools
 from tw_stock_plugin.object.stock_institutional_investors import InstitutionalInvestorsObject
