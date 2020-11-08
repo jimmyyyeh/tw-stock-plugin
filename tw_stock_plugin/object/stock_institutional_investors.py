@@ -16,7 +16,7 @@
 """
 
 
-class InstitutionalInvestors:
+class InstitutionalInvestorsObject:
     def __init__(self, code, name, foreign_mainland_area_buy, foreign_mainland_area_sell, foreign_mainland_area_diff,
                  foreign_buy, foreign_sell, foreign_diff, trust_buy, trust_sell, trust_diff, proprietary_dealers_buy,
                  proprietary_dealers_sell, proprietary_dealers_diff, hedge_dealers_buy, hedge_dealers_sell,

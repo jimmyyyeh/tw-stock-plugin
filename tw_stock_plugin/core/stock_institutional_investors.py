@@ -17,7 +17,7 @@
 from datetime import datetime, date
 
 from tw_stock_plugin.core.stock_tools import StockTools
-from tw_stock_plugin.object.stock_institutional_investors import InstitutionalInvestors
+from tw_stock_plugin.object.stock_institutional_investors import InstitutionalInvestorsObject
 from tw_stock_plugin.constant import Domain
 from tw_stock_plugin.utils.response_handler import ResponseHandler
 
@@ -66,7 +66,7 @@ class StockInstitutionalInvestors:
         removed_indices = {11}
         for data in data_list:
             data = [value for index, value in enumerate(data) if index not in removed_indices]
-            stock_institutional_investors = InstitutionalInvestors(**dict(zip(columns, data)))
+            stock_institutional_investors = InstitutionalInvestorsObject(**dict(zip(columns, data)))
             institutional_investors_dict[stock_institutional_investors.code] = stock_institutional_investors
         return institutional_investors_dict
 
@@ -99,7 +99,7 @@ class StockInstitutionalInvestors:
         removed_indices = {8, 9, 10, 20, 21, 22, 24}
         for data in data_list:
             data = [value for index, value in enumerate(data) if index not in removed_indices]
-            stock_institutional_investors = InstitutionalInvestors(**dict(zip(columns, data)))
+            stock_institutional_investors = InstitutionalInvestorsObject(**dict(zip(columns, data)))
             institutional_investors_dict[stock_institutional_investors.code] = stock_institutional_investors
         return institutional_investors_dict
 
