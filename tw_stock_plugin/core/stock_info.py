@@ -54,6 +54,7 @@ class StockInfo:
         for csv in csv_files:
             df = pd.read_csv(csv, index_col=0)
             df['證券代號'] = df['證券代號'].astype(str)
+            df = df.fillna('')
             for data in df.values.tolist():
                 stock_info = StockInfoObject(*data)
                 stocks[stock_info.code] = stock_info
