@@ -17,8 +17,10 @@
 import unittest
 import random
 from datetime import datetime
+from time import sleep
 
-from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockTools, StockInfoObject
+from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockMarginTrading, StockTools, \
+    StockInfoObject
 
 
 class TwStockPluginTest(unittest.TestCase):
@@ -27,6 +29,7 @@ class TwStockPluginTest(unittest.TestCase):
         self.stock_info = StockInfo()
         self.stock_trading = StockTrading(date_=self.testing_date)
         self.stock_institutional_investors = StockInstitutionalInvestors(date_=self.testing_date)
+        self.stock_margin_trading = StockMarginTrading(date_=self.testing_date)
         self.stock_dict = {
             '2330': {'code': '2330',
                      'name': '台積電',
@@ -181,6 +184,67 @@ class TwStockPluginTest(unittest.TestCase):
                      'hedge_dealers_diff': -16000,
                      'total_diff': -212000}
         }
+        self.margin_trading_all_dict = {
+            '1101': {
+                'code': '1101',
+                'name': '台泥',
+                'margin_purchase': 42,
+                'margin_sells': 93,
+                'cash_redemption': 0,
+                'cash_balance_of_previous_day': 9568,
+                'cash_balance_of_the_day': 9517,
+                'cash_quota': 1434625,
+                'short_covering': 0,
+                'short_sale': 17,
+                'stock_redemption': 0,
+                'stock_balance_of_previous_day': 178,
+                'stock_balance_of_the_day': 195,
+                'stock_quota': 1434625,
+                'offset': 0,
+                'note': None
+            },
+            '00672L': {
+                'code': '00672L',
+                'name': '元大S&P原油正2',
+                'margin_purchase': 0,
+                'margin_sells': 0,
+                'cash_redemption': 235,
+                'cash_balance_of_previous_day': 950,
+                'cash_balance_of_the_day': 715,
+                'cash_quota': 0,
+                'short_covering': 0,
+                'short_sale': 0,
+                'stock_redemption': 1,
+                'stock_balance_of_previous_day': 1,
+                'stock_balance_of_the_day': 0,
+                'stock_quota': 0,
+                'offset': 0,
+                'note': 'OX'
+            },
+            '1595': {
+                'code': '1595',
+                'name': '川寶',
+                'cash_balance_of_previous_day': 194,
+                'margin_purchase': 0,
+                'margin_sells': 3,
+                'cash_redemption': 0,
+                'cash_balance_of_the_day': 191,
+                'cash_belong_to_securities_finance': 6,
+                'cash_utilization_rate': 1.62,
+                'cash_quota': 11787,
+                'stock_balance_of_previous_day': 0,
+                'short_covering': 0,
+                'short_sale': 0,
+                'stock_redemption': 0,
+                'stock_balance_of_the_day': 0,
+                'stock_belong_to_securities_finance': 0,
+                'stock_utilization_rate': 0,
+                'stock_quota': 11787,
+                'offset': 0,
+                'note': '11,C'
+            }
+        }
+
         self.date_convert_dict = {
             '2020/10/10': '109/10/10',
             '2020/01/01': '109/01/01',
@@ -195,6 +259,7 @@ class TwStockPluginTest(unittest.TestCase):
         stock_info = StockInfoObject(**self.stock_dict[stock_code])
         stock_info_test = self.stock_info.get(code=stock_code)
         self.assertEqual(stock_info.__dict__, stock_info_test.__dict__)
+        sleep(3)
 
     def test_get_stock_attribute(self):
         stock_code = random.choice(list(self.stock_dict))
@@ -204,22 +269,26 @@ class TwStockPluginTest(unittest.TestCase):
             value = stock_info[key]
             value_test = getattr(stock_info_test, key)
             self.assertEqual(value, value_test)
+        sleep(3)
 
     def test_is_open_date(self):
         open_day_date = datetime.strptime('2020/10/23', '%Y/%m/%d').date()
         holiday_date = datetime.strptime('2020/10/10', '%Y/%m/%d').date()
         self.assertTrue(StockTools.check_is_open_date(open_day_date))
         self.assertFalse(StockTools.check_is_open_date(holiday_date))
+        sleep(3)
 
     def test_republic_era_to_ad(self):
         ad = random.choice(list(self.date_convert_dict))
         republic_era = self.date_convert_dict[ad]
         self.assertEqual(ad, StockTools.republic_era_to_ad(date_=republic_era))
+        sleep(3)
 
     def test_ad_to_republic_era(self):
         ad = random.choice(list(self.date_convert_dict))
         republic_era = self.date_convert_dict[ad]
         self.assertEqual(republic_era, StockTools.ad_to_republic_era(date_=ad))
+        sleep(3)
 
     def test_trading_data_history(self):
         stock_code = random.choice(list(self.trading_history_dict))
@@ -229,6 +298,7 @@ class TwStockPluginTest(unittest.TestCase):
             value = stock_trading_history[key]
             value_test = getattr(stock_trading_history_test, key)
             self.assertEqual(value, value_test)
+        sleep(3)
 
     def test_trading_data_all(self):
         stock_code = random.choice(list(self.trading_all_dict))
@@ -238,6 +308,7 @@ class TwStockPluginTest(unittest.TestCase):
             value = stock_trading_all[key]
             value_test = getattr(stock_trading_all_test, key)
             self.assertEqual(value, value_test)
+        sleep(3)
 
     def test_institutional_investors_data_all(self):
         stock_code = random.choice(list(self.institutional_investors_all_dict))
@@ -247,6 +318,17 @@ class TwStockPluginTest(unittest.TestCase):
             value = stock_institutional_investors_all[key]
             value_test = getattr(stock_institutional_investors_all_test, key)
             self.assertEqual(value, value_test)
+        sleep(3)
+
+    def test_margin_trading_data_all(self):
+        stock_code = random.choice(list(self.margin_trading_all_dict))
+        stock_margin_trading_all = self.margin_trading_all_dict[stock_code]
+        stock_margin_trading_all_test = self.stock_margin_trading.get_all()[stock_code]
+        for key in stock_margin_trading_all.keys():
+            value = stock_margin_trading_all[key]
+            value_test = getattr(stock_margin_trading_all_test, key)
+            self.assertEqual(value, value_test)
+        sleep(3)
 
 
 if __name__ == '__main__':

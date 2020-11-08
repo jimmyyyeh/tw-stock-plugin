@@ -29,3 +29,7 @@ class StockPattern:
 class TradingPattern:
     VALUE_PATTERN = re.compile(r'[+-]*[\d]+[\.\d]*')
     DIFFERENT_PATTERN = re.compile(r'[+-]')
+
+
+class MarginTradingPattern:
+    NOTE_STRIP_PATTERN = re.compile(r'[\s]+')

@@ -15,9 +15,11 @@
     God Bless,Never Bug
 """
 from datetime import datetime
-from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockTools, UpdateStock
+from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockMarginTrading, StockTools, \
+    UpdateStock
 
 if __name__ == '__main__':
+    """ basic info """
     # init stock info object
     stock_info = StockInfo()
     # get all stocks info
@@ -44,12 +46,11 @@ if __name__ == '__main__':
     # setting target date
     date_ = datetime(2020, 10, 30).date()
 
+    """ daily trading """
     # init stock trading object with specific date
     stock_trading = StockTrading(date_=date_)
-
     # getting all trading data in 2020/10/30
     trading_all = stock_trading.get_all()
-
     # getting 2330 trading data in 2020/10/30
     trading_2330 = trading_all['2330']
     # print 2330 name
@@ -60,23 +61,20 @@ if __name__ == '__main__':
     print(trading_2330.trade_value)
     # print 2330 closing_price
     print(trading_2330.closing_price)
-
     # getting monthly history trading data of 1101 in 2020/10
     trading_history_1101 = stock_trading.get_history(code=1101)
     # get only 2020/10/30 trading data
     print(trading_history_1101[date_])
-
     # getting monthly history trading data of 9962 in 2020/10
     trading_history_9962 = stock_trading.get_history(code=9962)
     # get only 2020/10/30 trading data
     print(trading_history_9962[date_])
 
+    """ institutional investors """
     # init stock institutional investors object with specific date
     stock_institutional_investors = StockInstitutionalInvestors(date_=date_)
-
     # getting all institutional investors data in 2020/10/30
     institutional_investors_all = stock_institutional_investors.get_all()
-
     # getting 2330 institutional investors data in 2020/10/30
     institutional_investors_2330 = institutional_investors_all['2330']
     # print 2330 foreign mainland area buy
@@ -85,5 +83,24 @@ if __name__ == '__main__':
     institutional_investors_3529 = institutional_investors_all['3529']
     # print 3529 foreign mainland area buy
     print(institutional_investors_3529.trust_diff)
+
+    """ margin trading """
+    # init stock margin trading object with specific date
+    stock_margin_trading = StockMarginTrading(date_=date_)
+    # getting all margin trading data in 2020/10/30
+    margin_trading_all = stock_margin_trading.get_all()
+    # getting 2330 margin trading data in 2020/10/30
+    margin_trading_2330 = margin_trading_all['2330']
+    # print 2330 margin purchase
+    print(margin_trading_2330.margin_purchase)
+    # print 2330 short covering
+    print(margin_trading_2330.short_covering)
+    # getting 3529 margin trading data in 2020/10/30
+    margin_trading_3529 = margin_trading_all['3529']
+    # print 3529 margin purchase
+    print(margin_trading_3529.margin_purchase)
+    # print 3529 short covering
+    print(margin_trading_3529.short_covering)
+
     # update newest stock info
     UpdateStock.main()
