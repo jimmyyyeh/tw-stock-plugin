@@ -132,10 +132,14 @@ class StockTrading:
         data_list = json_data['data']
         columns = ['trading_volume', 'trade_value', 'opening_price', 'highest_price', 'lowest_price',
                    'closing_price', 'change', 'transaction']
+
         for data in data_list:
             date_ = StockTools.republic_era_to_ad(data[0])
             date_ = datetime.strptime(date_, '%Y/%m/%d').date()
             stock_trading = TwseTradingObject(**(dict(zip(columns, data[1:]))))
+            for attr in stock_trading.__dict__.copy():
+                if attr not in columns:
+                    delattr(stock_trading, attr)
             trading_dict[date_] = stock_trading
         return trading_dict
 
@@ -161,6 +165,9 @@ class StockTrading:
             date_ = StockTools.republic_era_to_ad(data[0])
             date_ = datetime.strptime(date_, '%Y/%m/%d').date()
             stock_trading = TpexTradingObject(**(dict(zip(columns, data[1:]))))
+            for attr in stock_trading.__dict__.copy():
+                if attr not in columns:
+                    delattr(stock_trading, attr)
             trading_dict[date_] = stock_trading
         return trading_dict
 
