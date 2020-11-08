@@ -14,6 +14,7 @@
         ┗┻┛    ┗┻┛
     God Bless,Never Bug
 """
+from tw_stock_plugin.util.schema import SchemaPattern
 
 
 class StockInfoObject:
@@ -36,3 +37,13 @@ class StockInfoObject:
         self.industry = industry
         self.CFI_code = CFI_code
         self.type = type
+        self._format_value()
+        # self._valid_schema()
+
+    def _format_value(self):
+        for key, value in self.__dict__.items():
+            if not value:
+                setattr(self, key, None)
+
+    def _valid_schema(self):
+        SchemaPattern.StockInfoSchema.validate(self.__dict__)

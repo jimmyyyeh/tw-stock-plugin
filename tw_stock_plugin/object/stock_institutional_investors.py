@@ -14,6 +14,7 @@
         ┗┻┛    ┗┻┛
     God Bless,Never Bug
 """
+from tw_stock_plugin.util.schema import SchemaPattern
 
 
 class InstitutionalInvestorsObject:
@@ -60,12 +61,17 @@ class InstitutionalInvestorsObject:
         self.hedge_dealers_diff = hedge_dealers_diff
         self.total_diff = total_diff
         self._format_value()
+        # self._valid_schema()
 
     def _format_value(self):
         for key, value in self.__dict__.items():
+            value = value.strip()
             if value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
             elif key in {'code', 'name'}:
-                setattr(self, key, value.strip())
+                setattr(self, key, value)
             else:
-                setattr(self, key, float(value.strip()))
+                setattr(self, key, float(value))
+
+    def _valid_schema(self):
+        SchemaPattern.StockInstitutionalInvestorsSchema.validate(self.__dict__)

@@ -15,6 +15,7 @@
     God Bless,Never Bug
 """
 from tw_stock_plugin.regex_pattern import MarginTradingPattern
+from tw_stock_plugin.util.schema import SchemaPattern
 
 
 class TwseMarginTradingObject:
@@ -56,21 +57,25 @@ class TwseMarginTradingObject:
         self.offset = offset
         self.note = note
         self._format_value()
+        # self._valid_schema()
 
     def _format_value(self):
         for key, value in self.__dict__.items():
+            value = value.strip()
             if value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
             elif key in {'code', 'name'}:
-                setattr(self, key, value.strip())
+                setattr(self, key, value)
             elif key in {'note'}:
-                value = value.strip()
                 if MarginTradingPattern.NOTE_STRIP_PATTERN.search(value):
-                    setattr(self, key, MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value))
-                if not getattr(self, key):
+                    setattr(self, key, MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value).strip())
+                if not getattr(self, key) or not value:
                     setattr(self, key, None)
             else:
-                setattr(self, key, float(value.strip()))
+                setattr(self, key, float(value))
+
+    def _valid_schema(self):
+        SchemaPattern.TwseStockMarginTradingSchema.validate(self.__dict__)
 
 
 class TpexMarginTradingObject:
@@ -121,18 +126,22 @@ class TpexMarginTradingObject:
         self.offset = offset
         self.note = note
         self._format_value()
+        # self._valid_schema()
 
     def _format_value(self):
         for key, value in self.__dict__.items():
+            value = value.strip()
             if value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
             elif key in {'code', 'name'}:
-                setattr(self, key, value.strip())
+                setattr(self, key, value)
             elif key in {'note'}:
-                value = value.strip()
                 if MarginTradingPattern.NOTE_STRIP_PATTERN.search(value):
-                    setattr(self, key, MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value))
-                if not getattr(self, key):
+                    setattr(self, key, MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value).strip())
+                if not getattr(self, key) or not value:
                     setattr(self, key, None)
             else:
-                setattr(self, key, float(value.strip()))
+                setattr(self, key, float(value))
+
+    def _valid_schema(self):
+        SchemaPattern.TpexStockMarginTradingSchema.validate(self.__dict__)

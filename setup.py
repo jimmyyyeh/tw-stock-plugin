@@ -21,7 +21,7 @@ with open('README.md', 'r') as f:
 
 setuptools.setup(
     name='tw-stock-plugin',
-    version='0.0.4',
+    version='0.0.5',
     author='Jimmy Yeh',
     author_email='chienfeng0719@hotmail.com',
     description='Some util function when doing Taiwan stock web scraping and some common stock data parser',
@@ -38,7 +38,8 @@ setuptools.setup(
         'pandas==1.1.0',
         'numpy==1.19.1',
         'requests==2.24.0',
-        'lxml==4.5.2'
+        'lxml==4.5.2',
+        'schema==0.7.2'
     ],
     entry_points={
         'console_scripts': [

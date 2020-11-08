@@ -15,6 +15,7 @@
     God Bless,Never Bug
 """
 from tw_stock_plugin.regex_pattern import TradingPattern
+from tw_stock_plugin.util.schema import SchemaPattern
 
 
 class TwseTradingObject:
@@ -22,6 +23,7 @@ class TwseTradingObject:
                  closing_price, change, code=None, name=None, different=None, last_best_bid_price=None,
                  last_best_bid_volume=None, last_best_ask_price=None, last_best_ask_volume=None,
                  price_earning_rate=None):
+
         """
         :param code: 股票代碼
         :param name: 股票名稱
@@ -57,6 +59,7 @@ class TwseTradingObject:
         self.last_best_ask_volume = last_best_ask_volume
         self.price_earning_rate = price_earning_rate
         self._format_value()
+        # self._valid_schema()
 
     def _format_value(self):
         if self._different and TradingPattern.DIFFERENT_PATTERN.search(self._different):
@@ -64,15 +67,20 @@ class TwseTradingObject:
             self.change = f'{self._different}{self.change}' if self._different else self.change
 
         for key, value in self.__dict__.items():
-            value = value.strip()
-            if (value.startswith('-') and value.endswith('-')) or not value:
+            value = value.strip() if value else None
+            if not value or key in {'name', 'code', '_different'}:
+                continue
+            elif value.startswith('X'):
+                setattr(self, key, float(value.replace('X', '')))
+            elif (value.startswith('-') and value.endswith('-')):
                 setattr(self, key, None)
             elif value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
-            elif value and TradingPattern.VALUE_PATTERN.fullmatch(value) and key != 'code':
-                setattr(self, key, float(value))
             else:
-                setattr(self, key, value.strip())
+                setattr(self, key, float(value))
+
+    def _valid_schema(self):
+        SchemaPattern.TwseStockTradingSchema.validate(self.__dict__)
 
 
 class TpexTradingObject:
@@ -117,18 +125,21 @@ class TpexTradingObject:
         self.next_limit_up = next_limit_up
         self.next_limit_down = next_limit_down
         self._format_value()
+        # self._valid_schema()
 
     def _format_value(self):
         for key, value in self.__dict__.items():
-            value = value.strip()
-            if (value.startswith('-') and value.endswith('-')) or not value:
+            value = value.strip() if value else None
+            if not value or key in {'name', 'code', '_different'}:
+                continue
+            elif value.startswith('X'):
+                setattr(self, key, float(value.replace('X', '')))
+            elif (value.startswith('-') and value.endswith('-')) or not value:
                 setattr(self, key, None)
             elif value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
-            elif value and TradingPattern.VALUE_PATTERN.fullmatch(value) and key != 'code':
-                setattr(self, key, float(value))
             else:
-                setattr(self, key, value.strip())
+                setattr(self, key, float(value))
 
         if self.code and self.name:
             self.last_best_bid_volume = self.last_best_bid_volume * 1000 if self.last_best_bid_volume else None
@@ -136,3 +147,6 @@ class TpexTradingObject:
         else:
             self.trading_volume = self.trading_volume * 1000 if self.trading_volume else None
             self.trade_value = self.trade_value * 1000 if self.trade_value else None
+
+    def _valid_schema(self):
+        SchemaPattern.TpexStockTradingSchema.validate(self.__dict__)
