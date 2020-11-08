@@ -70,7 +70,8 @@ class UpdateStock:
                     data.append(tmp_type)
                     new_data.append(data)
             df = pd.DataFrame(new_data, columns=df_columns)
-            code_name_df = pd.DataFrame(df['有價證券代號及名稱'].str.split('\u3000', 1).tolist(),
+            df['有價證券代號及名稱'] = df['有價證券代號及名稱'].apply(lambda x: x.replace('\u3000', ' '))
+            code_name_df = pd.DataFrame(df['有價證券代號及名稱'].str.split(' ', 1).tolist(),
                                         columns=['證券代號', '證券名稱'])
             df = df.drop(['有價證券代號及名稱', '備註'], axis=1)
             df = pd.concat([code_name_df, df], axis=1)
