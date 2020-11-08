@@ -64,7 +64,8 @@ class TwseTradingObject:
             self.change = f'{self._different}{self.change}' if self._different else self.change
 
         for key, value in self.__dict__.items():
-            if value == '--' or not value or (value and not value.strip()):
+            value = value.strip()
+            if (value.startswith('-') and value.endswith('-')) or not value:
                 setattr(self, key, None)
             elif value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
@@ -119,7 +120,8 @@ class TpexTradingObject:
 
     def _format_value(self):
         for key, value in self.__dict__.items():
-            if value == '----' or not value or (value and not value.strip()):
+            value = value.strip()
+            if (value.startswith('-') and value.endswith('-')) or not value:
                 setattr(self, key, None)
             elif value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))

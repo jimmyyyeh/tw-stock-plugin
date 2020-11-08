@@ -25,6 +25,9 @@ from tw_stock_plugin.object.stock_info import StockInfoObject
 
 class StockInfo:
     """
+    TODO
+        https://dts.twse.com.tw/opendata/t187ap03_L.csv
+        https://dts.twse.com.tw/opendata/t187ap03_O.csv
     for getting basic stock info
     """
 
