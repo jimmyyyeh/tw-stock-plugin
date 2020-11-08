@@ -16,22 +16,22 @@
 """
 
 import os
-import re
 import requests
 import pandas as pd
 from time import sleep
 
 from tw_stock_plugin.config import Config
+from tw_stock_plugin.constant import Domain
+from tw_stock_plugin.regex_pattern import StockPattern
+from tw_stock_plugin.utils.response_handler import ResponseHandler
 
 
 class UpdateStock:
-    _URL_DICT = {
-        'stock_exchange': 'https://isin.twse.com.tw/isin/C_public.jsp?strMode=2',
-        'over_the_counter': 'https://isin.twse.com.tw/isin/C_public.jsp?strMode=4',
-        'emerging_stock': 'https://isin.twse.com.tw/isin/C_public.jsp?strMode=5'
+    _STR_MODE_DICT = {
+        'stock_exchange': 2,
+        'over_the_counter': 4,
+        'emerging_stock': 5
     }
-
-    _CODE_NAME_PATTERN = re.compile(r'[\da-zA-Z]+\s.*')
 
     @staticmethod
     def _get_response(url):
@@ -52,11 +52,16 @@ class UpdateStock:
             os.mkdir(Config.STOCK_CSV_DIR)
 
         print('UPDATING STOCK INFO')
-        for category, url in cls._URL_DICT.items():
-            response = cls._get_response(url=url)
+        for category, str_mode in cls._STR_MODE_DICT.items():
+            params = {
+                'strMode': str_mode
+            }
+            response = ResponseHandler.get(url=f'{Domain.TAIWAN_STOCK_EXCHANGE_CORPORATION_ISIN}/isin/C_public.jsp',
+                                           params=params)
+
             df = pd.read_html(response.text)[0]
             df_columns = df.iloc[0]
-            new_data = [data for data in df.values.tolist() if cls._CODE_NAME_PATTERN.search(data[0])]
+            new_data = [data for data in df.values.tolist() if StockPattern.CODE_NAME_PATTERN.search(data[0])]
             df = pd.DataFrame(new_data, columns=df_columns)
             code_name_df = pd.DataFrame(df['有價證券代號及名稱'].str.split('\u3000', 1).tolist(),
                                         columns=['證券代號', '證券名稱'])

@@ -22,6 +22,10 @@ class DatePattern:
     AD_PATTERN = re.compile(r'\d{4}[/-]\d{1,2}[/-]\d{1,2}')  # regex of ad
 
 
+class StockPattern:
+    CODE_NAME_PATTERN = re.compile(r'[\da-zA-Z]+\s.*')
+
+
 class TradingPattern:
     VALUE_PATTERN = re.compile(r'[+-]*[\d]+[\.\d]*')
     DIFFERENT_PATTERN = re.compile(r'[+-]')
