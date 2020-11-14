@@ -15,8 +15,8 @@
     God Bless,Never Bug
 """
 from datetime import datetime
-from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockMarginTrading, StockTools, \
-    UpdateStock
+from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockMarginTrading, \
+    StockShareholdings, StockTools, UpdateStock
 
 if __name__ == '__main__':
     """ basic info """
@@ -101,6 +101,18 @@ if __name__ == '__main__':
     print(margin_trading_3529.margin_purchase)
     # print 3529 short covering
     print(margin_trading_3529.short_covering)
+
+    """ shareholdings """
+    # init stock shareholdings object
+    stock_shareholdings = StockShareholdings()
+    # getting newest shareholdings data
+    shareholdings_newest = stock_shareholdings.get_newest()
+    # getting level 1 of 0050 shareholdings data form latest release
+    print(shareholdings_newest.get('0050')[1])
+    # getting 0050 shareholdings data at 2020/11/6
+    shareholdings_0050 = stock_shareholdings.get_by_query(code='0050', date_=datetime(2020, 11, 6).date())
+    # getting level 15 of 0050 shareholdings data at 2020/11/6
+    print(shareholdings_0050[15])
 
     # update newest stock info
     UpdateStock.main()

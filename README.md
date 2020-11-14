@@ -17,6 +17,8 @@
 - Getting daily stock margin trading data from official website.
     - [上市](https://www.twse.com.tw/zh/page/trading/exchange/MI_MARGN.html)
     - [上櫃](https://www.tpex.org.tw/web/stock/margin_trading/margin_balance/margin_bal.php?l=zh-tw)
+- Getting stock shareholdings data from official website.
+    - [上市/上櫃](https://www.tdcc.com.tw/portal/zh/smWeb/qryStock)
 - Check if the date is open date in stock market.
 - Convert specific datetime format more easily.
 
@@ -199,7 +201,8 @@ institutional_investors_3529 = institutional_investors_all['3529']
 ### Margin Trading
 ```python
 """
-You can get all data with specific date.
+    You can get all data with specific date.
+    
     Attribute:
         - 上市:
             - code: 股票代碼
@@ -281,6 +284,35 @@ print(margin_trading_3529.margin_purchase)
 print(margin_trading_3529.short_covering)
 ```
 
+### Shareholdings
+```python
+"""
+    You can get newest data or only specific stock data at specific date.
+    
+    Attribute:
+        - date: 日期
+        - code: 股票代碼
+        - index: 序
+        - number_of_shares: 持股/單位數分級
+        - number_of_shareholders: 人數
+        - total_shares: 股數/單位數
+        - percentage_over_total_shares: 占集保庫存數比例 (%)
+"""
+from datetime import datetime
+from tw_stock_plugin.core.stock_shareholdings import StockShareholdings
+
+# init stock shareholdings object
+stock_shareholdings = StockShareholdings()
+# getting newest shareholdings data
+shareholdings_newest = stock_shareholdings.get_newest()
+# getting level 1 of 0050 shareholdings data form latest release
+print(shareholdings_newest.get('0050')[1])
+# getting 0050 shareholdings data at 2020/11/6
+shareholdings_0050 = stock_shareholdings.get_by_query(code='0050', date_=datetime(2020, 11, 6).date())
+# getting level 15 of 0050 shareholdings data at 2020/11/6
+print(shareholdings_0050[15])
+```
+
 ### [Sample Code](https://github.com/jimmyyyeh/tw-stock-plugin/blob/develop/example.py)
 ```python
 # -*- coding: utf-8 -*
@@ -300,8 +332,8 @@ print(margin_trading_3529.short_covering)
     God Bless,Never Bug
 """
 from datetime import datetime
-from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockMarginTrading, StockTools, \
-    UpdateStock
+from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockMarginTrading, \
+    StockShareholdings, StockTools, UpdateStock
 
 if __name__ == '__main__':
     """ basic info """
@@ -386,6 +418,18 @@ if __name__ == '__main__':
     print(margin_trading_3529.margin_purchase)
     # print 3529 short covering
     print(margin_trading_3529.short_covering)
+
+    """ shareholdings """
+    # init stock shareholdings object
+    stock_shareholdings = StockShareholdings()
+    # getting newest shareholdings data
+    shareholdings_newest = stock_shareholdings.get_newest()
+    # getting level 1 of 0050 shareholdings data form latest release
+    print(shareholdings_newest.get('0050')[1])
+    # getting 0050 shareholdings data at 2020/11/6
+    shareholdings_0050 = stock_shareholdings.get_by_query(code='0050', date_=datetime(2020, 11, 6).date())
+    # getting level 15 of 0050 shareholdings data at 2020/11/6
+    print(shareholdings_0050[15])
 
     # update newest stock info
     UpdateStock.main()
