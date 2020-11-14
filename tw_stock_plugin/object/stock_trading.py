@@ -15,7 +15,7 @@
     God Bless,Never Bug
 """
 from tw_stock_plugin.regex_pattern import TradingPattern
-from tw_stock_plugin.util.schema import SchemaPattern
+from tw_stock_plugin.utils.schema import SchemaPattern
 
 
 class TwseTradingObject:

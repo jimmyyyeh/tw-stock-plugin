@@ -19,7 +19,7 @@ from datetime import datetime, date
 from tw_stock_plugin.core.stock_tools import StockTools
 from tw_stock_plugin.object.stock_trading import TwseTradingObject, TpexTradingObject
 from tw_stock_plugin.constant import Domain
-from tw_stock_plugin.util.response_handler import ResponseHandler
+from tw_stock_plugin.utils.response_handler import ResponseHandler
 
 
 class StockTrading:

@@ -23,7 +23,7 @@ from time import sleep
 from tw_stock_plugin.config import Config
 from tw_stock_plugin.constant import Domain
 from tw_stock_plugin.regex_pattern import StockPattern
-from tw_stock_plugin.util.response_handler import ResponseHandler
+from tw_stock_plugin.utils.response_handler import ResponseHandler
 
 
 class UpdateStock:

@@ -15,6 +15,7 @@
     God Bless,Never Bug
 """
 
+from datetime import date
 from schema import Schema, Or
 
 
@@ -134,4 +135,14 @@ class SchemaPattern:
         'stock_quota': float,
         'offset': float,
         'note': Or(str, None)
+    })
+
+    StockShareholdingsSchema = Schema({
+        'date': date,
+        'code': str,
+        'index': int,
+        'number_of_shares': Or(str, None),
+        'number_of_shareholders': int,
+        'total_shares': int,
+        'percentage_over_total_shares': float
     })
