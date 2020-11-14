@@ -19,8 +19,8 @@ import random
 from datetime import datetime
 from time import sleep
 
-from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockMarginTrading, StockTools, \
-    StockInfoObject
+from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockMarginTrading, \
+    StockShareholdings, StockTools, StockInfoObject
 
 
 class TwStockPluginTest(unittest.TestCase):
@@ -248,6 +248,221 @@ class TwStockPluginTest(unittest.TestCase):
             }
         }
 
+        self.shareholdings_dict = {
+            1: {'code': '0050',
+                'date': datetime(2020, 11, 6).date(),
+                'index': 1,
+                'number_of_shareholders': 78300,
+                'number_of_shares': '1-999',
+                'percentage_over_total_shares': 1.92,
+                'total_shares': 17839119},
+            2: {'code': '0050',
+                'date': datetime(2020, 11, 6).date(),
+                'index': 2,
+                'number_of_shareholders': 77229,
+                'number_of_shares': '1000-5000',
+                'percentage_over_total_shares': 15.55,
+                'total_shares': 143973016},
+            3: {'code': '0050',
+                'date': datetime(2020, 11, 6).date(),
+                'index': 3,
+                'number_of_shareholders': 7311,
+                'number_of_shares': '5001-10000',
+                'percentage_over_total_shares': 6.06,
+                'total_shares': 56155961},
+            4: {'code': '0050',
+                'date': datetime(2020, 11, 6).date(),
+                'index': 4,
+                'number_of_shareholders': 1974,
+                'number_of_shares': '10001-15000',
+                'percentage_over_total_shares': 2.72,
+                'total_shares': 25262584},
+            5: {'code': '0050',
+                'date': datetime(2020, 11, 6).date(),
+                'index': 5,
+                'number_of_shareholders': 1083,
+                'number_of_shares': '15001-20000',
+                'percentage_over_total_shares': 2.14,
+                'total_shares': 19811145},
+            6: {'code': '0050',
+                'date': datetime(2020, 11, 6).date(),
+                'index': 6,
+                'number_of_shareholders': 866,
+                'number_of_shares': '20001-30000',
+                'percentage_over_total_shares': 2.36,
+                'total_shares': 21886879},
+            7: {'code': '0050',
+                'date': datetime(2020, 11, 6).date(),
+                'index': 7,
+                'number_of_shareholders': 378,
+                'number_of_shares': '30001-40000',
+                'percentage_over_total_shares': 1.44,
+                'total_shares': 13356254},
+            8: {'code': '0050',
+                'date': datetime(2020, 11, 6).date(),
+                'index': 8,
+                'number_of_shareholders': 211,
+                'number_of_shares': '40001-50000',
+                'percentage_over_total_shares': 1.05,
+                'total_shares': 9763707},
+            9: {'code': '0050',
+                'date': datetime(2020, 11, 6).date(),
+                'index': 9,
+                'number_of_shareholders': 372,
+                'number_of_shares': '50001-100000',
+                'percentage_over_total_shares': 2.85,
+                'total_shares': 26397673},
+            10: {'code': '0050',
+                 'date': datetime(2020, 11, 6).date(),
+                 'index': 10,
+                 'number_of_shareholders': 132,
+                 'number_of_shares': '100001-200000',
+                 'percentage_over_total_shares': 1.96,
+                 'total_shares': 18216225},
+            11: {'code': '0050',
+                 'date': datetime(2020, 11, 6).date(),
+                 'index': 11,
+                 'number_of_shareholders': 69,
+                 'number_of_shares': '200001-400000',
+                 'percentage_over_total_shares': 2.17,
+                 'total_shares': 20105691},
+            12: {'code': '0050',
+                 'date': datetime(2020, 11, 6).date(),
+                 'index': 12,
+                 'number_of_shareholders': 14,
+                 'number_of_shares': '400001-600000',
+                 'percentage_over_total_shares': 0.74,
+                 'total_shares': 6887616},
+            13: {'code': '0050',
+                 'date': datetime(2020, 11, 6).date(),
+                 'index': 13,
+                 'number_of_shareholders': 9,
+                 'number_of_shares': '600001-800000',
+                 'percentage_over_total_shares': 0.69,
+                 'total_shares': 6452000},
+            14: {'code': '0050',
+                 'date': datetime(2020, 11, 6).date(),
+                 'index': 14,
+                 'number_of_shareholders': 9,
+                 'number_of_shares': '800001-1000000',
+                 'percentage_over_total_shares': 0.91,
+                 'total_shares': 8434000},
+            15: {'code': '0050',
+                 'date': datetime(2020, 11, 6).date(),
+                 'index': 15,
+                 'number_of_shareholders': 55,
+                 'number_of_shares': '1,000,001以上',
+                 'percentage_over_total_shares': 57.36,
+                 'total_shares': 530958130}
+        }
+
+        self.shareholdings_dict_all = {
+            1: {'code': '0050',
+                'date': datetime(2020, 11, 13).date(),
+                'index': 1,
+                'number_of_shareholders': 80620,
+                'number_of_shares': '1-999',
+                'percentage_over_total_shares': 1.95,
+                'total_shares': 18159107},
+            2: {'code': '0050',
+                'date': datetime(2020, 11, 13).date(),
+                'index': 2,
+                'number_of_shareholders': 74015,
+                'number_of_shares': '1,000-5,000',
+                'percentage_over_total_shares': 14.81,
+                'total_shares': 137930474},
+            3: {'code': '0050',
+                'date': datetime(2020, 11, 13).date(),
+                'index': 3,
+                'number_of_shareholders': 6953,
+                'number_of_shares': '5,001-10,000',
+                'percentage_over_total_shares': 5.73,
+                'total_shares': 53365960},
+            4: {'code': '0050',
+                'date': datetime(2020, 11, 13).date(),
+                'index': 4,
+                'number_of_shareholders': 1902,
+                'number_of_shares': '10,001-15,000',
+                'percentage_over_total_shares': 2.61,
+                'total_shares': 24308986},
+            5: {'code': '0050',
+                'date': datetime(2020, 11, 13).date(),
+                'index': 5,
+                'number_of_shareholders': 1021,
+                'number_of_shares': '15,001-20,000',
+                'percentage_over_total_shares': 2.0,
+                'total_shares': 18634713},
+            6: {'code': '0050',
+                'date': datetime(2020, 11, 13).date(),
+                'index': 6,
+                'number_of_shareholders': 822,
+                'number_of_shares': '20,001-30,000',
+                'percentage_over_total_shares': 2.22,
+                'total_shares': 20754627},
+            7: {'code': '0050',
+                'date': datetime(2020, 11, 13).date(),
+                'index': 7,
+                'number_of_shareholders': 344,
+                'number_of_shares': '30,001-40,000',
+                'percentage_over_total_shares': 1.3,
+                'total_shares': 12161242},
+            8: {'code': '0050',
+                'date': datetime(2020, 11, 13).date(),
+                'index': 8,
+                'number_of_shareholders': 210,
+                'number_of_shares': '40,001-50,000',
+                'percentage_over_total_shares': 1.04,
+                'total_shares': 9721246},
+            9: {'code': '0050',
+                'date': datetime(2020, 11, 13).date(),
+                'index': 9,
+                'number_of_shareholders': 355,
+                'number_of_shares': '50,001-100,000',
+                'percentage_over_total_shares': 2.7,
+                'total_shares': 25229118},
+            10: {'code': '0050',
+                 'date': datetime(2020, 11, 13).date(),
+                 'index': 10,
+                 'number_of_shareholders': 128,
+                 'number_of_shares': '100,001-200,000',
+                 'percentage_over_total_shares': 1.89,
+                 'total_shares': 17683736},
+            11: {'code': '0050',
+                 'date': datetime(2020, 11, 13).date(),
+                 'index': 11,
+                 'number_of_shareholders': 68,
+                 'number_of_shares': '200,001-400,000',
+                 'percentage_over_total_shares': 2.12,
+                 'total_shares': 19824803},
+            12: {'code': '0050',
+                 'date': datetime(2020, 11, 13).date(),
+                 'index': 12,
+                 'number_of_shareholders': 16,
+                 'number_of_shares': '400,001-600,000',
+                 'percentage_over_total_shares': 0.82,
+                 'total_shares': 7722616},
+            13: {'code': '0050',
+                 'date': datetime(2020, 11, 13).date(),
+                 'index': 13,
+                 'number_of_shareholders': 6,
+                 'number_of_shares': '600,001-800,000',
+                 'percentage_over_total_shares': 0.46,
+                 'total_shares': 4310000},
+            14: {'code': '0050',
+                 'date': datetime(2020, 11, 13).date(),
+                 'index': 14,
+                 'number_of_shareholders': 10,
+                 'number_of_shares': '800,001-1,000,000',
+                 'percentage_over_total_shares': 0.96,
+                 'total_shares': 9001000},
+            15: {'code': '0050',
+                 'date': datetime(2020, 11, 13).date(),
+                 'index': 15,
+                 'number_of_shareholders': 56,
+                 'number_of_shares': '1,000,001以上',
+                 'percentage_over_total_shares': 59.31,
+                 'total_shares': 552192372}}
+
         self.date_convert_dict = {
             '2020/10/10': '109/10/10',
             '2020/01/01': '109/01/01',
@@ -331,6 +546,34 @@ class TwStockPluginTest(unittest.TestCase):
             value = stock_margin_trading_all[key]
             value_test = getattr(stock_margin_trading_all_test, key)
             self.assertEqual(value, value_test)
+        sleep(3)
+
+    def test_shareholdings_data(self):
+        stock_code = '0050'
+        date_ = datetime(2020, 11, 6).date()
+        stock_shareholdings = StockShareholdings()
+        stock_shareholdings_test = stock_shareholdings.get_by_query(code=stock_code,
+                                                                    date_=date_)
+        for index in self.shareholdings_dict.keys():
+            dict_ = self.shareholdings_dict[index]
+            dict_test = stock_shareholdings_test[index]
+            for key in dict_.keys():
+                value = dict_[key]
+                value_test = getattr(dict_test, key)
+                self.assertEqual(value, value_test)
+        sleep(3)
+
+    def test_shareholdings_data_all(self):
+        stock_code = '0050'
+        stock_shareholdings = StockShareholdings()
+        stock_shareholdings_test = stock_shareholdings.get_newest()[stock_code]
+        for index in self.shareholdings_dict_all.keys():
+            dict_ = self.shareholdings_dict_all[index]
+            dict_test = stock_shareholdings_test[index]
+            for key in dict_.keys():
+                value = dict_[key]
+                value_test = getattr(dict_test, key)
+                self.assertEqual(value, value_test)
         sleep(3)
 
 
