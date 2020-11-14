@@ -1,0 +1,8 @@
+**test.py
+.DS_Store
+**/__pycache__/
+.idea/*
+build/
+dist/
+*.csv
+tw_stock_plugin.egg-info/
