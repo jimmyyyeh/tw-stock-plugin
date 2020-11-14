@@ -34,7 +34,7 @@ class StockShareholdingsObject:
         :param percentage_over_total_shares: 占集保庫存數比例 (%)
         :return:
         """
-        self.date = datetime.strptime(str(date), '%Y%m%d')
+        self.date = datetime.strptime(str(date), '%Y%m%d').date()
         self.code = code
         self.index = index
         self.number_of_shares = number_of_shares or self._transfer_number_of_shares()
