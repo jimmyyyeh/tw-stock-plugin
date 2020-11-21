@@ -32,3 +32,7 @@ class TradingPattern:
 
 class MarginTradingPattern:
     NOTE_STRIP_PATTERN = re.compile(r'[\s]+')
+
+
+class PERatioPattern:
+    CHINESE_DATE_PATTERN = re.compile(r'([\d]+)年([\d]+)月([\d]+)日')

@@ -14,15 +14,17 @@
         ┗┻┛    ┗┻┛
     God Bless,Never Bug
 """
-from datetime import datetime, date
+
+from datetime import date, datetime
 
 from tw_stock_plugin.core.stock_tools import StockTools
-from tw_stock_plugin.object.stock_trading import TwseTradingObject, TpexTradingObject
 from tw_stock_plugin.constant import Domain
+from tw_stock_plugin.object.stock_peratio import StockPERatioObject
 from tw_stock_plugin.utils.response_handler import ResponseHandler
+from tw_stock_plugin.regex_pattern import PERatioPattern
 
 
-class StockTrading:
+class StockPERatio:
     def __init__(self, date_):
         """
         :param date_: 查詢日期
@@ -37,18 +39,28 @@ class StockTrading:
         if not isinstance(self.date_, date):
             raise TypeError('input date must be type of datetime.date')
 
-    def _fetch_twse_data_all(self):
+    @staticmethod
+    def _translate_date(date_):
         """
-        fetch all trading data in specific date from twse website
+        translate date from chinese to correct format
+        :param date_:
         :return:
         """
-        trading_dict = dict()
-        url = f'{Domain.TAIWAN_STOCK_EXCHANGE_CORPORATION}/exchangeReport/MI_INDEX'
+        year, month, day = PERatioPattern.CHINESE_DATE_PATTERN.search(date_).groups()
+        return f'{year}/{month}/{day}'
+
+    def _fetch_twse_data_all(self):
+        """
+        fetch all p/e ratio, dividend yield and p/b ratio data in specific date from twse website
+        :return:
+        """
+        p_e_ratio_dict = dict()
+        url = f'{Domain.TAIWAN_STOCK_EXCHANGE_CORPORATION}/exchangeReport/BWIBBU_d'
         query_date = self.date_.strftime('%Y%m%d')
         params = {
             'response': 'json',
             'date': query_date,
-            'type': 'ALL'
+            'selectType': 'ALL'
         }
         response = ResponseHandler.get(url=url, params=params)
         if not response:
@@ -57,27 +69,25 @@ class StockTrading:
         stats = json_data['stat']
         if not stats == 'OK':
             return None
-        data_list = json_data['data9']
-        columns = ['code', 'name', 'trading_volume', 'transaction', 'trade_value', 'opening_price', 'highest_price',
-                   'lowest_price', 'closing_price', 'different', 'change', 'last_best_bid_price',
-                   'last_best_bid_volume', 'last_best_ask_price', 'last_best_ask_volume', 'price_earning_rate']
+        data_list = json_data['data']
+        columns = ['code', 'name', 'yield_ratio', 'dividend_year', 'per', 'pbr', 'fiscal_year_quarter']
         for data in data_list:
-            stock_trading = TwseTradingObject(**dict(zip(columns, data)))
-            trading_dict[stock_trading.code] = stock_trading
-        return trading_dict
+            p_e_ratio = StockPERatioObject(**dict(zip(columns, data)))
+            p_e_ratio_dict[p_e_ratio.code] = p_e_ratio
+        return p_e_ratio_dict
 
     def _fetch_tpex_data_all(self):
         """
-        fetch all trading data in specific date from tpex website
+        fetch all p/e ratio, dividend yield and p/b ratio data in specific date from tpex website
         :return:
         """
-        trading_dict = dict()
-        url = f'{Domain.TAIPEI_EXCHANGE}/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php'
+        p_e_ratio_dict = dict()
+        url = f'{Domain.TAIPEI_EXCHANGE}/web/stock/aftertrading/peratio_analysis/pera_result.php'
         query_date = StockTools.ad_to_republic_era(date_=self.date_).replace('-', '/'),
         params = {
             'l': 'zh-tw',
-            'd': query_date,
-            'se': 'EW'
+            'o': 'json',
+            'd': query_date
         }
         response = ResponseHandler.get(url=url, params=params)
         if not response:
@@ -86,36 +96,34 @@ class StockTrading:
         data_list = json_data['aaData']
         if not data_list:
             return None
-        columns = ['code', 'name', 'closing_price', 'change', 'opening_price', 'highest_price', 'lowest_price',
-                   'trading_volume', 'trade_value', 'transaction', 'last_best_bid_price', 'last_best_bid_volume',
-                   'last_best_ask_price', 'last_best_ask_volume', 'issued_shares', 'next_limit_up', 'next_limit_down']
+        columns = ['code', 'name', 'per', 'dividend_per_share', 'dividend_year', 'yield_ratio', 'pbr']
         for data in data_list:
-            stock_trading = TpexTradingObject(**dict(zip(columns, data)))
-            trading_dict[stock_trading.code] = stock_trading
-        return trading_dict
+            p_e_ratio = StockPERatioObject(**dict(zip(columns, data)))
+            p_e_ratio_dict[p_e_ratio.code] = p_e_ratio
+        return p_e_ratio_dict
 
     def get_all(self):
         """
-        return all trading data
+        return all p/e ratio, dividend yield and p/b ratio data
         :return:
         """
-        trading_dict = dict()
+        p_e_ratio_dict = dict()
         twse_data = self._fetch_twse_data_all()
         tpex_data = self._fetch_tpex_data_all()
         if twse_data:
-            trading_dict.update(twse_data)
+            p_e_ratio_dict.update(twse_data)
         if tpex_data:
-            trading_dict.update(tpex_data)
-        return trading_dict
+            p_e_ratio_dict.update(tpex_data)
+        return p_e_ratio_dict
 
     def _fetch_twse_data_history(self, code):
         """
-        get specific stock monthly trading data from twse website
+        get specific stock monthly p/e ratio, dividend yield and p/b ratio data from twse website
         :param code:
         :return:
         """
-        trading_dict = dict()
-        url = f'{Domain.TAIWAN_STOCK_EXCHANGE_CORPORATION}/exchangeReport/STOCK_DAY'
+        p_e_ratio_dict = dict()
+        url = f'{Domain.TAIWAN_STOCK_EXCHANGE_CORPORATION}/exchangeReport/BWIBBU'
         query_date = self.date_.strftime('%Y%m%d')
         params = {
             'response': 'json',
@@ -130,27 +138,27 @@ class StockTrading:
         if not stats == 'OK':
             return None
         data_list = json_data['data']
-        columns = ['trading_volume', 'trade_value', 'opening_price', 'highest_price', 'lowest_price',
-                   'closing_price', 'change', 'transaction']
+        columns = ['yield_ratio', 'year', 'per', 'pbr', 'fiscal_year_quarter']
 
         for data in data_list:
-            date_ = StockTools.republic_era_to_ad(data[0])
+            date_ = self._translate_date(data[0])
+            date_ = StockTools.republic_era_to_ad(date_)
             date_ = datetime.strptime(date_, '%Y/%m/%d').date()
-            stock_trading = TwseTradingObject(**(dict(zip(columns, data[1:]))))
-            for attr in stock_trading.__dict__.copy():
+            p_e_ratio = StockPERatioObject(**(dict(zip(columns, data[1:]))))
+            for attr in p_e_ratio.__dict__.copy():
                 if attr not in columns:
-                    delattr(stock_trading, attr)
-            trading_dict[date_] = stock_trading
-        return trading_dict
+                    delattr(p_e_ratio, attr)
+            p_e_ratio_dict[date_] = p_e_ratio
+        return p_e_ratio_dict
 
     def _fetch_tpex_data_history(self, code):
         """
-        get specific stock monthly trading data from tpex website
+        get specific stock monthly p/e ratio, dividend yield and p/b ratio data from tpex website
         :param code:
         :return:
         """
-        trading_dict = dict()
-        url = f'{Domain.TAIPEI_EXCHANGE}/web/stock/aftertrading/daily_trading_info/st43_result.php'
+        p_e_ratio_dict = dict()
+        url = f'{Domain.TAIPEI_EXCHANGE}/web/stock/aftertrading/peratio_stk/pera_result.php?'
         query_date = StockTools.ad_to_republic_era(date_=self.date_).replace('-', '/'),
         params = {
             'l': 'zh-tw',
@@ -164,21 +172,20 @@ class StockTrading:
         data_list = json_data['aaData']
         if not data_list:
             return None
-        columns = ['trading_volume', 'trade_value', 'opening_price', 'highest_price', 'lowest_price',
-                   'closing_price', 'change', 'transaction']
+        columns = ['per', 'yield_ratio', 'year', 'pbr']
         for data in data_list:
             date_ = StockTools.republic_era_to_ad(data[0])
             date_ = datetime.strptime(date_, '%Y/%m/%d').date()
-            stock_trading = TpexTradingObject(**(dict(zip(columns, data[1:]))))
-            for attr in stock_trading.__dict__.copy():
+            p_e_ratio = StockPERatioObject(**(dict(zip(columns, data[1:]))))
+            for attr in p_e_ratio.__dict__.copy():
                 if attr not in columns:
-                    delattr(stock_trading, attr)
-            trading_dict[date_] = stock_trading
-        return trading_dict
+                    delattr(p_e_ratio, attr)
+            p_e_ratio_dict[date_] = p_e_ratio
+        return p_e_ratio_dict
 
     def get_history(self, code):
         """
-        return monthly trading data with specific stock code
+        return monthly p/e ratio, dividend yield and p/b ratio data with specific stock code
         :param code:
         :return:
         """
