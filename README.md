@@ -17,6 +17,11 @@
 - Getting daily stock margin trading data from official website.
     - [上市](https://www.twse.com.tw/zh/page/trading/exchange/MI_MARGN.html)
     - [上櫃](https://www.tpex.org.tw/web/stock/margin_trading/margin_balance/margin_bal.php?l=zh-tw)
+- Getting p/e ratio, dividend yield and p/b ratio from official website.
+    - [上市(全)](https://www.twse.com.tw/zh/page/trading/exchange/BWIBBU_d.html)
+    - [上市(個股)](https://www.twse.com.tw/zh/page/trading/exchange/BWIBBU.html)
+    - [上櫃(全)](https://www.tpex.org.tw/web/stock/aftertrading/peratio_analysis/pera.php?l=zh-tw)
+    - [上櫃(個股)](https://www.tpex.org.tw/web/stock/aftertrading/peratio_stk/pera.php?l=zh-tw)
 - Getting stock shareholdings data from official website.
     - [上市/上櫃](https://www.tdcc.com.tw/portal/zh/smWeb/qryStock)
 - Check if the date is open date in stock market.
@@ -284,6 +289,69 @@ print(margin_trading_3529.margin_purchase)
 print(margin_trading_3529.short_covering)
 ```
 
+### P/E Ratio
+```python
+"""
+    You can get all data with specific date or get only single one stock history data.
+
+    Attribute:
+        - P/E Ratio Data
+            - 上市:
+                - code: 股票代碼
+                - name: 股票名稱
+                - yield_ratio: 殖利率(%)
+                - dividend_year: 股利年度
+                - per: 本益比
+                - pbr: 股價淨值比
+                - fiscal_year_quarter: 財報年/季
+            - 上櫃:
+                - code: 股票代碼
+                - name: 股票名稱
+                - yield_ratio: 殖利率(%)
+                - dividend_year: 股利年度
+                - per: 本益比
+                - pbr: 股價淨值比
+                - dividend_per_share: 每股股利
+
+        - Monthly P/E Ratio Data
+            - 上市:
+                - yield_ratio: 殖利率(%)
+                - dividend_year: 股利年度
+                - per: 本益比
+                - pbr: 股價淨值比
+                - fiscal_year_quarter: 財報年/季
+
+            - 上櫃:
+                - yield_ratio: 殖利率(%)
+                - dividend_year: 股利年度
+                - per: 本益比
+                - pbr: 股價淨值比
+"""
+from datetime import datetime
+from tw_stock_plugin.core.stock_peratio import StockPERatio
+
+date_ = datetime(2020, 11, 6).date()
+
+# init stock p/e ratio, dividend yield and p/b ratio object with specific date
+stock_p_e_ratio = StockPERatio(date_=date_)
+# getting all p/e ratio, dividend yield and p/b ratio data in 2020/10/30
+p_e_ratio_all = stock_p_e_ratio.get_all()
+# getting 2330 p/e ratio, dividend yield and p/b ratio data in 2020/10/30
+p_e_ratio_2330 = p_e_ratio_all['2330']
+# print 2330 pbr
+print(p_e_ratio_2330.pbr)
+# print 2330 per
+print(p_e_ratio_2330.per)
+# getting monthly history p/e ratio, dividend yield and p/b ratio data of 1101 in 2020/10
+p_e_ratio_history_1101 = stock_p_e_ratio.get_history(code=1101)
+# get only 2020/10/30 p/e ratio, dividend yield and p/b ratio data
+print(p_e_ratio_history_1101[date_])
+# getting monthly history p/e ratio, dividend yield and p/b ratio data data of 9962 in 2020/10
+p_e_ratio_history_9962 = stock_p_e_ratio.get_history(code=9962)
+# get only 2020/10/30 p/e ratio, dividend yield and p/b ratio data data
+print(p_e_ratio_history_9962[date_])
+```
+
 ### Shareholdings
 ```python
 """
@@ -332,7 +400,7 @@ print(shareholdings_0050[15])
     God Bless,Never Bug
 """
 from datetime import datetime
-from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockMarginTrading, \
+from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockMarginTrading, StockPERatio, \
     StockShareholdings, StockTools, UpdateStock
 
 if __name__ == '__main__':
@@ -418,6 +486,26 @@ if __name__ == '__main__':
     print(margin_trading_3529.margin_purchase)
     # print 3529 short covering
     print(margin_trading_3529.short_covering)
+
+    """ P/E ratio """
+    # init stock p/e ratio, dividend yield and p/b ratio object with specific date
+    stock_p_e_ratio = StockPERatio(date_=date_)
+    # getting all p/e ratio, dividend yield and p/b ratio data in 2020/10/30
+    p_e_ratio_all = stock_p_e_ratio.get_all()
+    # getting 2330 p/e ratio, dividend yield and p/b ratio data in 2020/10/30
+    p_e_ratio_2330 = p_e_ratio_all['2330']
+    # print 2330 pbr
+    print(p_e_ratio_2330.pbr)
+    # print 2330 per
+    print(p_e_ratio_2330.per)
+    # getting monthly history p/e ratio, dividend yield and p/b ratio data of 1101 in 2020/10
+    p_e_ratio_history_1101 = stock_p_e_ratio.get_history(code=1101)
+    # get only 2020/10/30 p/e ratio, dividend yield and p/b ratio data
+    print(p_e_ratio_history_1101[date_])
+    # getting monthly history p/e ratio, dividend yield and p/b ratio data data of 9962 in 2020/10
+    p_e_ratio_history_9962 = stock_p_e_ratio.get_history(code=9962)
+    # get only 2020/10/30 p/e ratio, dividend yield and p/b ratio data data
+    print(p_e_ratio_history_9962[date_])
 
     """ shareholdings """
     # init stock shareholdings object
