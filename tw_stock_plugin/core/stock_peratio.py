@@ -138,7 +138,7 @@ class StockPERatio:
         if not stats == 'OK':
             return None
         data_list = json_data['data']
-        columns = ['yield_ratio', 'year', 'per', 'pbr', 'fiscal_year_quarter']
+        columns = ['yield_ratio', 'dividend_year', 'per', 'pbr', 'fiscal_year_quarter']
 
         for data in data_list:
             date_ = self._translate_date(data[0])
@@ -172,7 +172,7 @@ class StockPERatio:
         data_list = json_data['aaData']
         if not data_list:
             return None
-        columns = ['per', 'yield_ratio', 'year', 'pbr']
+        columns = ['per', 'yield_ratio', 'dividend_year', 'pbr']
         for data in data_list:
             date_ = StockTools.republic_era_to_ad(data[0])
             date_ = datetime.strptime(date_, '%Y/%m/%d').date()

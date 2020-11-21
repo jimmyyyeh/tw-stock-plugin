@@ -151,10 +151,9 @@ class SchemaPattern:
         'name': Or(str, None),
         'code': Or(str, None),
         'date': Or(date, None),
-        'year': Or(int, None),
         'per': Or(float, None),
         'dividend_per_share': Or(float, None),
-        'dividend_year': Or(float, None),
+        'dividend_year': Or(int, None),
         'yield_ratio': Or(float, None),
         'pbr': Or(float, None),
         'fiscal_year_quarter': Or(str, None)
