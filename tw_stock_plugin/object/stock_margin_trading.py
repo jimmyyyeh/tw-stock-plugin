@@ -68,9 +68,12 @@ class TwseMarginTradingObject:
                 setattr(self, key, value)
             elif key in {'note'}:
                 if MarginTradingPattern.NOTE_STRIP_PATTERN.search(value):
-                    setattr(self, key, MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value).strip())
-                if not getattr(self, key) or not value:
+                    value = MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value)
+                    setattr(self, key, value)
+                elif not getattr(self, key) or not value:
                     setattr(self, key, None)
+                else:
+                    setattr(self, key, value)
             else:
                 setattr(self, key, float(value))
 
@@ -137,9 +140,12 @@ class TpexMarginTradingObject:
                 setattr(self, key, value)
             elif key in {'note'}:
                 if MarginTradingPattern.NOTE_STRIP_PATTERN.search(value):
-                    setattr(self, key, MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value).strip())
-                if not getattr(self, key) or not value:
+                    value = MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value)
+                    setattr(self, key, value)
+                elif not getattr(self, key) or not value:
                     setattr(self, key, None)
+                else:
+                    setattr(self, key, value)
             else:
                 setattr(self, key, float(value))
 
