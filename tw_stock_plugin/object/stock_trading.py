@@ -72,10 +72,12 @@ class TwseTradingObject:
                 continue
             elif value.startswith('X'):
                 setattr(self, key, float(value.replace('X', '')))
-            elif (value.startswith('-') and value.endswith('-')):
+            elif value.startswith('-') and value.endswith('-'):
                 setattr(self, key, None)
             elif value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
+            elif value in {'除息', '除權'}:
+                setattr(self, key, value)
             else:
                 setattr(self, key, float(value))
 
@@ -138,6 +140,8 @@ class TpexTradingObject:
                 setattr(self, key, None)
             elif value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
+            elif value in {'除息', '除權'}:
+                setattr(self, key, value)
             else:
                 setattr(self, key, float(value))
 
