@@ -61,10 +61,7 @@ class TwseMarginTradingObject:
 
     def _format_value(self):
         for key, value in self.__dict__.items():
-            if value:
-                value = value.strip() if isinstance(value, str) else value
-            else:
-                value = None
+            value = value.strip() if isinstance(value, str) else value
             if value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
             elif key in {'code', 'name'}:
@@ -73,7 +70,7 @@ class TwseMarginTradingObject:
                 if MarginTradingPattern.NOTE_STRIP_PATTERN.search(value):
                     value = MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value)
                     setattr(self, key, value)
-                elif not getattr(self, key) or not value:
+                elif not getattr(self, key) == '':
                     setattr(self, key, None)
                 else:
                     setattr(self, key, value)
@@ -136,10 +133,7 @@ class TpexMarginTradingObject:
 
     def _format_value(self):
         for key, value in self.__dict__.items():
-            if value:
-                value = value.strip() if isinstance(value, str) else value
-            else:
-                value = None
+            value = value.strip() if isinstance(value, str) else value
             if value and ',' in value:
                 setattr(self, key, float(value.replace(',', '')))
             elif key in {'code', 'name'}:
@@ -148,7 +142,7 @@ class TpexMarginTradingObject:
                 if MarginTradingPattern.NOTE_STRIP_PATTERN.search(value):
                     value = MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value)
                     setattr(self, key, value)
-                elif not getattr(self, key) or not value:
+                elif not getattr(self, key) == '':
                     setattr(self, key, None)
                 else:
                     setattr(self, key, value)
