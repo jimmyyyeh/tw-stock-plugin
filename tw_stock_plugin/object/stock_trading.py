@@ -67,7 +67,10 @@ class TwseTradingObject:
             self.change = f'{self._different}{self.change}' if self._different else self.change
 
         for key, value in self.__dict__.items():
-            value = value.strip() if value else None
+            if value:
+                value = value.strip() if isinstance(value, str) else value
+            else:
+                value = None
             if not value or key in {'name', 'code', '_different'}:
                 continue
             elif value.startswith('X'):
@@ -131,7 +134,10 @@ class TpexTradingObject:
 
     def _format_value(self):
         for key, value in self.__dict__.items():
-            value = value.strip() if value else None
+            if value:
+                value = value.strip() if isinstance(value, str) else value
+            else:
+                value = None
             if not value or key in {'name', 'code', '_different'}:
                 continue
             elif value.startswith('X'):
