@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+  python:
+     build:
+       context: .
+     image: tw_stock_plugin
+     container_name: tw_stock_plugin
+     env_file: .env
+     volumes:
+      - ./tw_stock_plugin:/app/tw_stock_plugin:rw
+      - ./test:/app/test:rw
+     tty: true
