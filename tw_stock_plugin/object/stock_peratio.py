@@ -45,19 +45,22 @@ class StockPERatioObject:
         # self._valid_schema()
 
     def _format_value(self):
+        integer_keys = {'dividend_year'}
         float_keys = {'per', 'dividend_per_share', 'yield_ratio', 'pbr'}
-        for key in float_keys:
-            value = getattr(self, key)
-            if value in {'N/A', '-'}:
-                setattr(self, key, None)
-            elif isinstance(value, str) and ',' in value:
-                setattr(self, key, value.replace(',', ''))
-
-            value = getattr(self, key)
-            if getattr(self, key):
-                setattr(self, key, float(value))
-        if self.dividend_year:
-            self.dividend_year = int(self.dividend_year)
+        for key, value in self.__dict__.items():
+            value = value.strip() if isinstance(value, str) else value
+            if value is None:
+                continue
+            elif key in integer_keys:
+                value = int(value)
+            elif key in float_keys:
+                if value in {'N/A', '-', ''}:
+                    value = None
+                elif isinstance(value, str) and ',' in value:
+                    value = float(value.replace(',', ''))
+                else:
+                    value = float(value)
+            setattr(self, key, value)
 
     def _valid_schema(self):
         SchemaPattern.StockPERatioSchema.validate(self.__dict__)

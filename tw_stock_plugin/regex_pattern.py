@@ -27,7 +27,7 @@ class StockPattern:
 
 
 class TradingPattern:
-    DIFFERENT_PATTERN = re.compile(r'[+-]')
+    DIFFERENT_PATTERN = re.compile(r'[+-X]*[\d\.]*')
 
 
 class MarginTradingPattern:

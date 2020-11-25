@@ -60,22 +60,26 @@ class TwseMarginTradingObject:
         # self._valid_schema()
 
     def _format_value(self):
+        float_keys = {'margin_purchase', 'margin_sells', 'cash_redemption', 'cash_balance_of_previous_day',
+                      'cash_balance_of_the_day', 'cash_quota', 'short_covering', 'short_sale', 'stock_redemption',
+                      'stock_balance_of_previous_day', 'stock_balance_of_the_day', 'stock_quota', 'offset'}
         for key, value in self.__dict__.items():
             value = value.strip() if isinstance(value, str) else value
-            if value and ',' in value:
-                setattr(self, key, float(value.replace(',', '')))
-            elif key in {'code', 'name'}:
-                setattr(self, key, value)
+            if value is None:
+                continue
+            elif key in float_keys:
+                if isinstance(value, str) and ',' in value:
+                    value = float(value.replace(',', ''))
+                elif value == '':
+                    value = None
+                else:
+                    value = float(value)
             elif key in {'note'}:
                 if MarginTradingPattern.NOTE_STRIP_PATTERN.search(value):
                     value = MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value)
-                    setattr(self, key, value)
-                elif not getattr(self, key) == '':
-                    setattr(self, key, None)
-                else:
-                    setattr(self, key, value)
-            else:
-                setattr(self, key, float(value))
+                elif value == '':
+                    value = None
+            setattr(self, key, value)
 
     def _valid_schema(self):
         SchemaPattern.TwseStockMarginTradingSchema.validate(self.__dict__)
@@ -132,22 +136,28 @@ class TpexMarginTradingObject:
         # self._valid_schema()
 
     def _format_value(self):
+        float_keys = {'cash_balance_of_previous_day', 'margin_purchase', 'margin_sells', 'cash_redemption',
+                      'cash_balance_of_the_day', 'cash_belong_to_securities_finance', 'cash_utilization_rate',
+                      'cash_quota', 'stock_balance_of_previous_day', 'short_covering', 'short_sale',
+                      'stock_redemption', 'stock_balance_of_the_day', 'stock_belong_to_securities_finance',
+                      'stock_utilization_rate', 'stock_quota', 'offset'}
         for key, value in self.__dict__.items():
             value = value.strip() if isinstance(value, str) else value
-            if value and ',' in value:
-                setattr(self, key, float(value.replace(',', '')))
-            elif key in {'code', 'name'}:
-                setattr(self, key, value)
+            if value is None:
+                continue
+            elif key in float_keys:
+                if isinstance(value, str) and ',' in value:
+                    value = float(value.replace(',', ''))
+                elif value == '':
+                    value = None
+                else:
+                    value = float(value)
             elif key in {'note'}:
                 if MarginTradingPattern.NOTE_STRIP_PATTERN.search(value):
                     value = MarginTradingPattern.NOTE_STRIP_PATTERN.sub(',', value)
-                    setattr(self, key, value)
-                elif not getattr(self, key) == '':
-                    setattr(self, key, None)
-                else:
-                    setattr(self, key, value)
-            else:
-                setattr(self, key, float(value))
+                elif value == '':
+                    value = None
+            setattr(self, key, value)
 
     def _valid_schema(self):
         SchemaPattern.TpexStockMarginTradingSchema.validate(self.__dict__)
