@@ -71,21 +71,21 @@ class TwseTradingObject:
                 self.change = f'{self._different}{self.change}' if self._different else self.change
 
         float_keys = {'trading_volume', 'transaction', 'trade_value', 'opening_price', 'highest_price',
-                      'lowest_price', 'closing_price', 'last_best_bid_price', 'last_best_bid_price',
+                      'lowest_price', 'closing_price', 'last_best_bid_price', 'last_best_bid_price', 'change',
                       'last_best_bid_volume', 'last_best_ask_price', 'last_best_ask_volume', 'price_earning_rate'}
 
         for key, value in self.__dict__.items():
             value = value.strip() if isinstance(value, str) else value
             if value is None:
                 continue
-            elif key in float_keys and not value.startswith('-') and value not in {'除權', '除息', '除權息'}:
+            elif key in float_keys and not set(value) == {'-'} and value not in {'除權', '除息', '除權息'}:
                 if isinstance(value, str) and ',' in value:
                     value = float(value.replace(',', ''))
                 elif value == '':
                     value = None
                 else:
                     value = float(value)
-            elif value.startswith('-'):
+            elif set(value) == {'-'}:
                 value = None
             setattr(self, key, value)
 
@@ -139,7 +139,7 @@ class TpexTradingObject:
 
     def _format_value(self):
         float_keys = {'closing_price', 'change', 'opening_price', 'highest_price', 'lowest_price', 'trading_volume',
-                      'trade_value', 'transaction', 'last_best_bid_price', 'last_best_ask_price',
+                      'trade_value', 'transaction', 'last_best_bid_price', 'last_best_ask_price', 'change',
                       'last_best_bid_volume', 'last_best_ask_volume', 'issued_shares', 'next_limit_up',
                       'next_limit_down'}
 
@@ -147,14 +147,14 @@ class TpexTradingObject:
             value = value.strip() if isinstance(value, str) else value
             if value is None:
                 continue
-            elif key in float_keys and not value.startswith('-') and value not in {'除權', '除息', '除權息'}:
+            elif key in float_keys and not set(value) == {'-'} and value not in {'除權', '除息', '除權息'}:
                 if isinstance(value, str) and ',' in value:
                     value = float(value.replace(',', ''))
                 elif value == '':
                     value = None
                 else:
                     value = float(value)
-            elif value.startswith('-'):
+            elif set(value) == {'-'}:
                 value = None
             setattr(self, key, value)
 

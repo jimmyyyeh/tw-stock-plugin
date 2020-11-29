@@ -189,24 +189,24 @@ class TwStockPluginTest(unittest.TestCase):
                      'total_diff': -212000}
         }
         self.margin_trading_all_dict = {
-            # '1101': {
-            #     'code': '1101',
-            #     'name': '台泥',
-            #     'margin_purchase': 42,
-            #     'margin_sells': 93,
-            #     'cash_redemption': 0,
-            #     'cash_balance_of_previous_day': 9568,
-            #     'cash_balance_of_the_day': 9517,
-            #     'cash_quota': 1434625,
-            #     'short_covering': 0,
-            #     'short_sale': 17,
-            #     'stock_redemption': 0,
-            #     'stock_balance_of_previous_day': 178,
-            #     'stock_balance_of_the_day': 195,
-            #     'stock_quota': 1434625,
-            #     'offset': 0,
-            #     'note': None
-            # },
+            '1101': {
+                'code': '1101',
+                'name': '台泥',
+                'margin_purchase': 42,
+                'margin_sells': 93,
+                'cash_redemption': 0,
+                'cash_balance_of_previous_day': 9568,
+                'cash_balance_of_the_day': 9517,
+                'cash_quota': 1434625,
+                'short_covering': 0,
+                'short_sale': 17,
+                'stock_redemption': 0,
+                'stock_balance_of_previous_day': 178,
+                'stock_balance_of_the_day': 195,
+                'stock_quota': 1434625,
+                'offset': 0,
+                'note': None
+            },
             '00672L': {
                 'code': '00672L',
                 'name': '元大S&P原油正2',
@@ -225,28 +225,28 @@ class TwStockPluginTest(unittest.TestCase):
                 'offset': 0,
                 'note': 'OX'
             },
-            # '1595': {
-            #     'code': '1595',
-            #     'name': '川寶',
-            #     'cash_balance_of_previous_day': 194,
-            #     'margin_purchase': 0,
-            #     'margin_sells': 3,
-            #     'cash_redemption': 0,
-            #     'cash_balance_of_the_day': 191,
-            #     'cash_belong_to_securities_finance': 6,
-            #     'cash_utilization_rate': 1.62,
-            #     'cash_quota': 11787,
-            #     'stock_balance_of_previous_day': 0,
-            #     'short_covering': 0,
-            #     'short_sale': 0,
-            #     'stock_redemption': 0,
-            #     'stock_balance_of_the_day': 0,
-            #     'stock_belong_to_securities_finance': 0,
-            #     'stock_utilization_rate': 0,
-            #     'stock_quota': 11787,
-            #     'offset': 0,
-            #     'note': '11,C'
-            # }
+            '1595': {
+                'code': '1595',
+                'name': '川寶',
+                'cash_balance_of_previous_day': 194,
+                'margin_purchase': 0,
+                'margin_sells': 3,
+                'cash_redemption': 0,
+                'cash_balance_of_the_day': 191,
+                'cash_belong_to_securities_finance': 6,
+                'cash_utilization_rate': 1.62,
+                'cash_quota': 11787,
+                'stock_balance_of_previous_day': 0,
+                'short_covering': 0,
+                'short_sale': 0,
+                'stock_redemption': 0,
+                'stock_balance_of_the_day': 0,
+                'stock_belong_to_securities_finance': 0,
+                'stock_utilization_rate': 0,
+                'stock_quota': 11787,
+                'offset': 0,
+                'note': '11,C'
+            }
         }
         self.p_e_ratio_history_dict = {
             '2330': {'yield_ratio': 2.2,
@@ -620,18 +620,18 @@ class TwStockPluginTest(unittest.TestCase):
                 self.assertEqual(value, value_test)
         sleep(3)
 
-    def test_shareholdings_data_all(self):
-        stock_code = '0050'
-        stock_shareholdings = StockShareholdings()
-        stock_shareholdings_test = stock_shareholdings.get_newest()[stock_code]
-        for index in self.shareholdings_dict_all.keys():
-            dict_ = self.shareholdings_dict_all[index]
-            dict_test = stock_shareholdings_test[index]
-            for key in dict_.keys():
-                value = dict_[key]
-                value_test = getattr(dict_test, key)
-                self.assertEqual(value, value_test)
-        sleep(3)
+    # def test_shareholdings_data_all(self):
+    #     stock_code = '0050'
+    #     stock_shareholdings = StockShareholdings()
+    #     stock_shareholdings_test = stock_shareholdings.get_newest()[stock_code]
+    #     for index in self.shareholdings_dict_all.keys():
+    #         dict_ = self.shareholdings_dict_all[index]
+    #         dict_test = stock_shareholdings_test[index]
+    #         for key in dict_.keys():
+    #             value = dict_[key]
+    #             value_test = getattr(dict_test, key)
+    #             self.assertEqual(value, value_test)
+    #     sleep(3)
 
 
 if __name__ == '__main__':
