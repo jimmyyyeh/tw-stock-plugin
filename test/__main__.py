@@ -20,7 +20,7 @@ from datetime import datetime
 from time import sleep
 
 from tw_stock_plugin import StockInfo, StockTrading, StockInstitutionalInvestors, StockMarginTrading, \
-    StockShareholdings, StockTools, StockInfoObject
+    StockPERatio, StockShareholdings, StockTools, StockInfoObject
 
 
 class TwStockPluginTest(unittest.TestCase):
@@ -30,6 +30,7 @@ class TwStockPluginTest(unittest.TestCase):
         self.stock_trading = StockTrading(date_=self.testing_date)
         self.stock_institutional_investors = StockInstitutionalInvestors(date_=self.testing_date)
         self.stock_margin_trading = StockMarginTrading(date_=self.testing_date)
+        self.stock_p_e_ratio = StockPERatio(date_=self.testing_date)
         self.stock_dict = {
             '2330': {'code': '2330',
                      'name': '台積電',
@@ -247,7 +248,45 @@ class TwStockPluginTest(unittest.TestCase):
                 'note': '11,C'
             }
         }
-
+        self.p_e_ratio_history_dict = {
+            '2330': {'yield_ratio': 2.2,
+                     'dividend_year': 108,
+                     'per': 24.63,
+                     'pbr': 6.51,
+                     'fiscal_year_quarter': '109/2'},
+            '1101': {'yield_ratio': 7.40,
+                     'dividend_year': 108,
+                     'per': 9.56,
+                     'pbr': 1.25,
+                     'fiscal_year_quarter': '109/2'},
+            '9962': {'per': None,
+                     'yield_ratio': 2.2,
+                     'dividend_year': 108,
+                     'pbr': 0.89}
+        }
+        self.p_e_ratio_all_dict = {
+            '1101': {'code': '1101',
+                     'name': '台泥',
+                     'yield_ratio': 7.4,
+                     'dividend_year': 108,
+                     'per': 9.56,
+                     'pbr': 1.25,
+                     'fiscal_year_quarter': '109/2'},
+            '2330': {'code': '2330',
+                     'name': '台積電',
+                     'yield_ratio': 2.2,
+                     'dividend_year': 108,
+                     'per': 24.63,
+                     'pbr': 6.51,
+                     'fiscal_year_quarter': '109/2'},
+            '2221': {'code': '2221',
+                     'name': '大甲',
+                     'per': 13.82,
+                     'dividend_per_share': 1.5,
+                     'dividend_year': 108,
+                     'yield_ratio': 6.38,
+                     'pbr': 1.33}
+        }
         self.shareholdings_dict = {
             1: {'code': '0050',
                 'date': datetime(2020, 11, 6).date(),
@@ -355,7 +394,6 @@ class TwStockPluginTest(unittest.TestCase):
                  'percentage_over_total_shares': 57.36,
                  'total_shares': 530958130}
         }
-
         self.shareholdings_dict_all = {
             1: {'code': '0050',
                 'date': datetime(2020, 11, 13).date(),
@@ -462,7 +500,6 @@ class TwStockPluginTest(unittest.TestCase):
                  'number_of_shares': '1,000,001以上',
                  'percentage_over_total_shares': 59.31,
                  'total_shares': 552192372}}
-
         self.date_convert_dict = {
             '2020/10/10': '109/10/10',
             '2020/01/01': '109/01/01',
@@ -548,6 +585,26 @@ class TwStockPluginTest(unittest.TestCase):
             self.assertEqual(value, value_test)
         sleep(3)
 
+    def test_p_e_ratio_data_history(self):
+        stock_code = random.choice(list(self.p_e_ratio_history_dict))
+        stock_p_e_ratio = self.p_e_ratio_history_dict[stock_code]
+        stock_p_e_ratio_test = self.stock_p_e_ratio.get_history(code=stock_code)[self.testing_date]
+        for key in stock_p_e_ratio.keys():
+            value = stock_p_e_ratio[key]
+            value_test = getattr(stock_p_e_ratio_test, key)
+            self.assertEqual(value, value_test)
+        sleep(3)
+
+    def test_p_e_ratio_data_all(self):
+        stock_code = random.choice(list(self.p_e_ratio_all_dict))
+        stock_p_e_ratio_all = self.p_e_ratio_all_dict[stock_code]
+        stock_p_e_ratio_all_test = self.stock_p_e_ratio.get_all()[stock_code]
+        for key in stock_p_e_ratio_all.keys():
+            value = stock_p_e_ratio_all[key]
+            value_test = getattr(stock_p_e_ratio_all_test, key)
+            self.assertEqual(value, value_test)
+        sleep(3)
+
     def test_shareholdings_data(self):
         stock_code = '0050'
         date_ = datetime(2020, 11, 6).date()
@@ -563,18 +620,18 @@ class TwStockPluginTest(unittest.TestCase):
                 self.assertEqual(value, value_test)
         sleep(3)
 
-    def test_shareholdings_data_all(self):
-        stock_code = '0050'
-        stock_shareholdings = StockShareholdings()
-        stock_shareholdings_test = stock_shareholdings.get_newest()[stock_code]
-        for index in self.shareholdings_dict_all.keys():
-            dict_ = self.shareholdings_dict_all[index]
-            dict_test = stock_shareholdings_test[index]
-            for key in dict_.keys():
-                value = dict_[key]
-                value_test = getattr(dict_test, key)
-                self.assertEqual(value, value_test)
-        sleep(3)
+    # def test_shareholdings_data_all(self):
+    #     stock_code = '0050'
+    #     stock_shareholdings = StockShareholdings()
+    #     stock_shareholdings_test = stock_shareholdings.get_newest()[stock_code]
+    #     for index in self.shareholdings_dict_all.keys():
+    #         dict_ = self.shareholdings_dict_all[index]
+    #         dict_test = stock_shareholdings_test[index]
+    #         for key in dict_.keys():
+    #             value = dict_[key]
+    #             value_test = getattr(dict_test, key)
+    #             self.assertEqual(value, value_test)
+    #     sleep(3)
 
 
 if __name__ == '__main__':

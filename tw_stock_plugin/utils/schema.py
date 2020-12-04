@@ -35,7 +35,7 @@ class SchemaPattern:
         'code': Or(str, None),
         'name': Or(str, None),
         'closing_price': Or(float, None),
-        'change': Or(float, None),
+        'change': Or(float, str, None),
         'opening_price': Or(float, None),
         'highest_price': Or(float, None),
         'lowest_price': Or(float, None),
@@ -55,7 +55,7 @@ class SchemaPattern:
             'code': Or(str, None),
             'name': Or(str, None),
             'closing_price': Or(float, None),
-            'change': Or(float, None),
+            'change': Or(float, str, None),
             'opening_price': Or(float, None),
             'highest_price': Or(float, None),
             'lowest_price': Or(float, None),
@@ -145,4 +145,16 @@ class SchemaPattern:
         'number_of_shareholders': int,
         'total_shares': int,
         'percentage_over_total_shares': float
+    })
+
+    StockPERatioSchema = Schema({
+        'name': Or(str, None),
+        'code': Or(str, None),
+        'date': Or(date, None),
+        'per': Or(float, None),
+        'dividend_per_share': Or(float, None),
+        'dividend_year': Or(int, None),
+        'yield_ratio': Or(float, None),
+        'pbr': Or(float, None),
+        'fiscal_year_quarter': Or(str, None)
     })

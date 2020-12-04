@@ -66,6 +66,9 @@ class StockInstitutionalInvestors:
         removed_indices = {11}
         for data in data_list:
             data = [value for index, value in enumerate(data) if index not in removed_indices]
+            if len(columns) != len(data):
+                print(f'{data[0]} MISSING INSTITUTIONAL INVESTORS MISSING')
+                continue
             stock_institutional_investors = InstitutionalInvestorsObject(**dict(zip(columns, data)))
             institutional_investors_dict[stock_institutional_investors.code] = stock_institutional_investors
         return institutional_investors_dict
@@ -99,6 +102,9 @@ class StockInstitutionalInvestors:
         removed_indices = {8, 9, 10, 20, 21, 22, 24}
         for data in data_list:
             data = [value for index, value in enumerate(data) if index not in removed_indices]
+            if len(columns) != len(data):
+                print(f'{data[0]} MISSING INSTITUTIONAL INVESTORS MISSING')
+                continue
             stock_institutional_investors = InstitutionalInvestorsObject(**dict(zip(columns, data)))
             institutional_investors_dict[stock_institutional_investors.code] = stock_institutional_investors
         return institutional_investors_dict

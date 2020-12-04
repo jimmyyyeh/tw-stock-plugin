@@ -64,14 +64,22 @@ class InstitutionalInvestorsObject:
         # self._valid_schema()
 
     def _format_value(self):
+        floats_keys = {'foreign_mainland_area_buy', 'foreign_mainland_area_sell', 'foreign_mainland_area_diff',
+                       'foreign_buy', 'foreign_sell', 'foreign_diff', 'trust_buy', 'trust_sell', 'trust_diff',
+                       'proprietary_dealers_buy', 'proprietary_dealers_sell', 'proprietary_dealers_diff',
+                       'hedge_dealers_buy', 'hedge_dealers_sell', 'hedge_dealers_diff', 'total_diff'}
         for key, value in self.__dict__.items():
-            value = value.strip()
-            if value and ',' in value:
-                setattr(self, key, float(value.replace(',', '')))
-            elif key in {'code', 'name'}:
-                setattr(self, key, value)
-            else:
-                setattr(self, key, float(value))
+            value = value.strip() if isinstance(value, str) else value
+            if value is None:
+                continue
+            elif key in floats_keys:
+                if isinstance(value, str) and ',' in value:
+                    value = float(value.replace(',', ''))
+                elif value == '':
+                    value = None
+                else:
+                    value = float(value)
+            setattr(self, key, value)
 
     def _valid_schema(self):
         SchemaPattern.StockInstitutionalInvestorsSchema.validate(self.__dict__)
