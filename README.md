@@ -54,7 +54,7 @@ stock_info = StockInfo()
 # get all stocks info
 print(stock_info.get())
 # get 1101 stock info
-print(stock_info.get('110'))
+print(stock_info.get('1101'))
 # get 1101 stock name
 print(stock_info.get('1101').name)
 # get 1101 B stock name, it will return value error because it doesn't exists
