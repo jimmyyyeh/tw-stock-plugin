@@ -2,34 +2,34 @@
 **Some util function when doing Taiwan stock web scraping and some common stock data parser.**
 
 ## What can tw-stock-plugin do?
-- Getting newest stock information from official website.
+- Getting the newest stock information from the official website.
     - [上市](https://isin.twse.com.tw/isin/C_public.jsp?strMode=2)
     - [上櫃](https://isin.twse.com.tw/isin/C_public.jsp?strMode=4)
     - [興櫃](https://isin.twse.com.tw/isin/C_public.jsp?strMode=5)
-- Getting daily stock trading data from official website.
+- Getting daily stock trading data from the official website.
     - [上市(全)](https://www.twse.com.tw/zh/page/trading/exchange/MI_INDEX.html)
     - [上市(個股)](https://www.twse.com.tw/zh/page/trading/exchange/STOCK_DAY.html)
     - [上櫃(全)](https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430.php?l=zh-tw)
     - [上櫃(個股)](https://www.tpex.org.tw/web/stock/aftertrading/daily_trading_info/st43.php?l=zh-tw)
-- Getting daily stock institutional investors data from official website.
+- Getting daily stock institutional investors data from the official website.
     - [上市](https://www.twse.com.tw/zh/page/trading/fund/T86.html)
     - [上櫃](https://www.tpex.org.tw/web/stock/3insti/daily_trade/3itrade_hedge.php?l=zh-tw)
-- Getting daily stock margin trading data from official website.
+- Getting daily stock margin trading data from the official website.
     - [上市](https://www.twse.com.tw/zh/page/trading/exchange/MI_MARGN.html)
     - [上櫃](https://www.tpex.org.tw/web/stock/margin_trading/margin_balance/margin_bal.php?l=zh-tw)
-- Getting p/e ratio, dividend yield and p/b ratio from official website.
+- Getting p/e ratio, dividend yield and p/b ratio from the official website.
     - [上市(全)](https://www.twse.com.tw/zh/page/trading/exchange/BWIBBU_d.html)
     - [上市(個股)](https://www.twse.com.tw/zh/page/trading/exchange/BWIBBU.html)
     - [上櫃(全)](https://www.tpex.org.tw/web/stock/aftertrading/peratio_analysis/pera.php?l=zh-tw)
     - [上櫃(個股)](https://www.tpex.org.tw/web/stock/aftertrading/peratio_stk/pera.php?l=zh-tw)
-- Getting stock shareholdings data from official website.
+- Getting stock shareholdings data from the official website.
     - [上市/上櫃](https://www.tdcc.com.tw/portal/zh/smWeb/qryStock)
 - Check if the date is open date in stock market.
 - Convert specific datetime format more easily.
 
 ## NOTE
 1. The following definition of data and variable are all refer to the official website.
-2. To avoiding banned by official website, I recommend that users who use tw-stock-plugin set delay time at least three seconds after calling each function.
+2. To avoiding banned by the official website, I recommend that users who use tw-stock-plugin set delay time at least three seconds after calling each function.
 ## How To Use:
 
 ### Stock Information
@@ -54,7 +54,7 @@ stock_info = StockInfo()
 # get all stocks info
 print(stock_info.get())
 # get 1101 stock info
-print(stock_info.get('110'))
+print(stock_info.get('1101'))
 # get 1101 stock name
 print(stock_info.get('1101').name)
 # get 1101 B stock name, it will return value error because it doesn't exists
