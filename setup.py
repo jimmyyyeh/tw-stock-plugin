@@ -27,7 +27,7 @@ setuptools.setup(
     description='Some util function when doing Taiwan stock web scraping and some common stock data parser',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/chienfeng0719/tw-stock-plugin',
+    url='https://github.com/jimmyyyeh/tw-stock-plugin',
     packages=setuptools.find_packages(),
     classifiers=[
         'Programming Language :: Python :: 3',
