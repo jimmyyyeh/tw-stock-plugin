@@ -38,7 +38,7 @@ setuptools.setup(
         'pandas==1.1.0',
         'numpy==1.22.0',
         'requests==2.24.0',
-        'lxml==4.6.3',
+        'lxml==4.6.5',
         'schema==0.7.2'
     ],
     entry_points={
