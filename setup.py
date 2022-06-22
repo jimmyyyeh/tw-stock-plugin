@@ -36,7 +36,7 @@ setuptools.setup(
     ],
     install_requires=[
         'pandas==1.1.0',
-        'numpy==1.19.1',
+        'numpy==1.22.0',
         'requests==2.24.0',
         'lxml==4.6.3',
         'schema==0.7.2'
